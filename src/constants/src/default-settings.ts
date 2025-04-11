@@ -9,7 +9,8 @@ import {
   RGBAColor,
   SyncTimelineMode,
   BaseMapColorModes,
-  Merge
+  Merge,
+  LayerGroup
 } from '@kepler.gl/types';
 import {
   scaleLinear,
@@ -300,96 +301,114 @@ type DefaultBaseMapStyle = Merge<
   }
 >;
 
-export const DEFAULT_NO_BASEMAP_STYLE: DefaultBaseMapStyle = {
+export const DEFAULT_NO_BASEMAP_STYLE: BaseMapStyle = {
   id: NO_MAP_ID,
   label: 'No Basemap',
   url: '',
-  icon: NO_BASEMAP_ICON,
-  layerGroups: [BACKGROUND_LAYER_GROUP],
-  colorMode: BASE_MAP_COLOR_MODES.NONE,
-  style: EMPTY_MAPBOX_STYLE
+  icon: `${KEPLER_UNFOLDED_BUCKET}/basemaps/no-map.png`,
+  layerGroups: []
 };
 
-export const DEFAULT_MAPBOX_STYLES: DefaultBaseMapStyle[] = [
+// Define Custom Local Styles based on user's tile server
+const LOCAL_CUSTOM_STYLES: BaseMapStyle[] = [
   {
-    id: 'dark',
-    label: 'Dark',
-    url: 'http://localhost:3000/styles/dark/style.json',
-    layerGroups: DEFAULT_LAYER_GROUPS,
-    colorMode: BASE_MAP_COLOR_MODES.DARK,
-    complimentaryStyleId: 'light'
+    id: 'local_osm_light',
+    label: 'OSM Light (Local)',
+    // URL uses the name 'GOOGLE_MAPS' from the server startup logs, format pbf
+    url: 'http://localhost:3000/mbtiles/GOOGLE_MAPS/{z}/{x}/{y}.pbf',
+    icon: '',
+    layerGroups: [
+      {
+        slug: 'label',
+        filter: ({id}: {id: string}) => id.match(/(?=(label|place-|poi-))/),
+        defaultVisibility: true
+      },
+      {
+        slug: 'road',
+        filter: ({id}: {id: string}) => id.match(/(?=(road|railway|tunnel|street|bridge))/),
+        defaultVisibility: true
+      },
+      {
+        slug: 'border',
+        filter: ({id}: {id: string}) => id.match(/(?=(admin|country|place))/),
+        defaultVisibility: true
+      },
+      {
+        slug: 'building',
+        filter: ({id}: {id: string}) => id.match(/(?=(building))/),
+        defaultVisibility: true
+      },
+      {
+        slug: 'water',
+        filter: ({id}: {id: string}) => id.match(/(?=(water|stream|ferry))/),
+        defaultVisibility: true
+      },
+      {
+        slug: 'land',
+        filter: ({id}: {id: string}) => id.match(/(?=(parks|landcover|industrial|sand|hillshade))/),
+        defaultVisibility: true
+      },
+      {
+        slug: '3d building',
+        filter: () => false,
+        defaultVisibility: false
+      }
+    ] as LayerGroup[] // Use LayerGroup[] type
   },
   {
-    id: 'light',
-    label: 'Light',
-    url: 'http://localhost:3000/styles/light/style.json',
-    layerGroups: DEFAULT_LAYER_GROUPS,
-    colorMode: BASE_MAP_COLOR_MODES.LIGHT,
-    complimentaryStyleId: 'dark'
+    id: 'local_satellite',
+    label: 'Satellite (Local)',
+    // URL uses the name 'SATELLITE' from the server startup logs, format jpg
+    url: 'http://localhost:3000/mbtiles/SATELLITE/{z}/{x}/{y}.jpg',
+    icon: '',
+    layerGroups: [] as LayerGroup[] // Empty array for raster layers
   },
   {
-    id: 'muted',
-    label: 'Muted Light',
-    url: 'http://localhost:3000/styles/muted/style.json',
-    layerGroups: DEFAULT_LAYER_GROUPS,
-    colorMode: BASE_MAP_COLOR_MODES.LIGHT,
-    complimentaryStyleId: 'muted_night'
+    id: 'local_terrain',
+    label: 'Terrain (Local)',
+    // URL uses the name 'TERRAIN' from the server startup logs, format webp
+    url: 'http://localhost:3000/mbtiles/TERRAIN/{z}/{x}/{y}.webp',
+    icon: '',
+    layerGroups: [] as LayerGroup[]
   },
   {
-    id: 'muted_night',
-    label: 'Muted Night',
-    url: 'http://localhost:3000/styles/muted_night/style.json',
-    layerGroups: DEFAULT_LAYER_GROUPS,
-    colorMode: BASE_MAP_COLOR_MODES.DARK,
-    complimentaryStyleId: 'muted'
+    id: 'local_terrain_dem',
+    label: 'Terrain DEM (Local)',
+    // URL uses the name 'TERRAIN_DEM' from the server startup logs, format png
+    url: 'http://localhost:3000/mbtiles/TERRAIN_DEM/{z}/{x}/{y}.png',
+    icon: '',
+    layerGroups: [] as LayerGroup[]
+  },
+  {
+    id: 'local_euro_control_tfr_low',
+    label: 'Euro Control TFR Low (Local)',
+    // URL uses the name 'EURO_CONTROL_TFR_LOW' from the server startup logs, format png
+    url: 'http://localhost:3000/mbtiles/EURO_CONTROL_TFR_LOW/{z}/{x}/{y}.png',
+    icon: '',
+    layerGroups: [] as LayerGroup[]
+  },
+  {
+    id: 'local_neurope_vfr_highres',
+    label: 'NEurope VFR HighRes (Local)',
+    // URL uses the name 'NEUROPE_VFR_HIGHRES' from the server startup logs, format png
+    url: 'http://localhost:3000/mbtiles/NEUROPE_VFR_HIGHRES/{z}/{x}/{y}.png',
+    icon: '',
+    layerGroups: [] as LayerGroup[]
+  },
+  {
+    id: 'local_epww_256',
+    label: 'EPWW 256 (Local)',
+    // URL uses the name 'EPWW_256' from the server startup logs, format png
+    url: 'http://localhost:3000/mbtiles/EPWW_256/{z}/{x}/{y}.png',
+    icon: '',
+    layerGroups: [] as LayerGroup[]
   }
 ];
 
-export const DEFAULT_MAPBOX_SATELITE_STYLES: DefaultBaseMapStyle[] = [
-  {
-    id: 'satellite',
-    label: 'Satellite with streets',
-    url: 'http://localhost:3000/styles/satellite/style.json',
-    layerGroups: DEFAULT_LAYER_GROUPS,
-    colorMode: BASE_MAP_COLOR_MODES.NONE
-  }
-];
-
-export const DEFAULT_MAPLIBRE_STYLES: DefaultBaseMapStyle[] = [
-  {
-    id: 'dark-matter',
-    label: 'DarkMatter',
-    url: 'https://basemaps.cartocdn.com/gl/dark-matter-gl-style/style.json',
-    icon: `${BASEMAP_ICON_PREFIX}/DARKMATTER.png`,
-    layerGroups: DEFAULT_LAYER_GROUPS,
-    colorMode: BASE_MAP_COLOR_MODES.DARK,
-    complimentaryStyleId: 'positron'
-  },
-  {
-    id: 'positron',
-    label: 'Positron',
-    url: 'https://basemaps.cartocdn.com/gl/positron-gl-style/style.json',
-    icon: `${BASEMAP_ICON_PREFIX}/POSITRON.png`,
-    layerGroups: DEFAULT_LAYER_GROUPS,
-    colorMode: BASE_MAP_COLOR_MODES.LIGHT,
-    complimentaryStyleId: 'dark-matter'
-  },
-  {
-    id: 'voyager',
-    label: 'Voyager',
-    url: 'https://basemaps.cartocdn.com/gl/voyager-gl-style/style.json',
-    icon: `${BASEMAP_ICON_PREFIX}/VOYAGER.png`,
-    layerGroups: DEFAULT_LAYER_GROUPS,
-    colorMode: BASE_MAP_COLOR_MODES.LIGHT,
-    complimentaryStyleId: 'dark-matter'
-  }
-];
-
-export const DEFAULT_MAP_STYLES = [
+// Replace DEFAULT_MAP_STYLES to use local styles
+export const DEFAULT_MAP_STYLES: BaseMapStyle[] = [
   DEFAULT_NO_BASEMAP_STYLE,
-  ...DEFAULT_MAPLIBRE_STYLES,
-  ...DEFAULT_MAPBOX_SATELITE_STYLES,
-  ...DEFAULT_MAPBOX_STYLES
+  ...LOCAL_CUSTOM_STYLES
 ];
 
 export const GEOJSON_FIELDS = {
