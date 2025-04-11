@@ -55,10 +55,7 @@ const config = {
   bundle: true,
   define: {
     NODE_ENV: JSON.stringify(process.env.NODE_ENV || 'production'),
-    'process.env.MapboxAccessToken': JSON.stringify(process.env.MapboxAccessToken || ''),
     'process.env.DropboxClientId': JSON.stringify(process.env.DropboxClientId || ''),
-    'process.env.MapboxExportToken': JSON.stringify(process.env.MapboxExportToken || ''),
-    'process.env.CartoClientId': JSON.stringify(process.env.CartoClientId || ''),
     'process.env.FoursquareClientId': JSON.stringify(process.env.FoursquareClientId || ''),
     'process.env.FoursquareDomain': JSON.stringify(process.env.FoursquareDomain || ''),
     'process.env.FoursquareAPIURL': JSON.stringify(process.env.FoursquareAPIURL || ''),
@@ -105,10 +102,7 @@ function validateEnvVariable(variable, instruction) {
   if (args.includes('--build')) {
     // Validate environment variables before production build
     const ENV_VARIABLES_WITH_INSTRUCTIONS = {
-      MapboxAccessToken: 'Get your Mapbox token at https://www.mapbox.com/help/how-access-tokens-work/',
       DropboxClientId: 'Get your Dropbox key at https://www.dropbox.com/developers',
-      MapboxExportToken: 'Get your Mapbox token at https://www.mapbox.com/help/how-access-tokens-work/',
-      CartoClientId: 'Get your CARTO client id',
       FoursquareClientId: 'Get your Foursquare client id',
       FoursquareDomain: 'Set your Foursquare domain',
       FoursquareAPIURL: 'Set your Foursquare API URL',

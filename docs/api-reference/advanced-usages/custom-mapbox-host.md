@@ -4,7 +4,6 @@ The KeplerGL component accepts an optional parameter `mapboxApiUrl` to override 
 ```js
   <KeplerGl
       id="foo"
-      mapboxApiAccessToken={token}
       mapboxApiUrl={"https://api.mapbox.cn"}
       width={width}
       height={height}/>
@@ -20,14 +19,14 @@ The default MapStyles KeplerGL uses might not be accessible to you, in this case
       id: 'dark',
       label: 'Dark Streets 9',
       url: 'mapbox://styles/mapbox/dark-v9',
-      icon: `${this.apiHost}/styles/v1/mapbox/dark-v9/static/-122.3391,37.7922,9.19,0,0/400x300?access_token=${this.token}&logo=false&attribution=false`,
+      icon: `${this.apiHost}/styles/v1/mapbox/dark-v9/static/-122.3391,37.7922,9.19,0,0/400x300?logo=false&attribution=false`,
       layerGroups: [] // DEFAULT_LAYER_GROUPS
     },
     {
       id: 'light',
       label: 'Light Streets 9',
       url: 'mapbox://styles/mapbox/light-v9',
-      icon: `${this.apiHost}/styles/v1/mapbox/light-v9/static/-122.3391,37.7922,9.19,0,0/400x300?access_token=${this.token}&logo=false&attribution=false`,
+      icon: `${this.apiHost}/styles/v1/mapbox/light-v9/static/-122.3391,37.7922,9.19,0,0/400x300?logo=false&attribution=false`,
       layerGroups: [] // DEFAULT_LAYER_GROUPS
     }
   ];
@@ -37,7 +36,6 @@ and In render:
 ```js
   <KeplerGl
       id="foo"
-      mapboxApiAccessToken={this.token}
       mapboxApiUrl={}
       mapStyles={this.mapStyles}
       width={width}

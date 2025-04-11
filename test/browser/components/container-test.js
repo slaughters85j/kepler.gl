@@ -63,7 +63,6 @@ test('Components -> Container -> Mount with mint:true', t => {
     payload: {
       id: 'map',
       mint: true,
-      mapboxApiAccessToken: undefined,
       mapboxApiUrl: undefined,
       mapStylesReplaceDefault: undefined,
       initialUiState: undefined
@@ -90,8 +89,7 @@ test('Components -> Container -> Mount with mint:true', t => {
 
   let wrapper;
   const testId = {
-    id: 'milkshake',
-    mapboxApiAccessToken: 'pk.smoothie'
+    id: 'milkshake'
   };
 
   // mount with mint: true
@@ -101,7 +99,6 @@ test('Components -> Container -> Mount with mint:true', t => {
         <Container
           getState={s => s.smoothie}
           id={testId.id}
-          mapboxApiAccessToken={testId.mapboxApiAccessToken}
         />
       </Provider>
     );
@@ -114,7 +111,6 @@ test('Components -> Container -> Mount with mint:true', t => {
     payload: {
       id: 'milkshake',
       mint: true,
-      mapboxApiAccessToken: 'pk.smoothie',
       mapboxApiUrl: undefined,
       mapStylesReplaceDefault: undefined,
       initialUiState: undefined
@@ -130,8 +126,7 @@ test('Components -> Container -> Mount with mint:true', t => {
       milkshake: {
         ...initialCoreState,
         mapStyle: {
-          ...initialCoreState.mapStyle,
-          mapboxApiAccessToken: 'pk.smoothie'
+          ...initialCoreState.mapStyle
         }
       }
     }
@@ -183,7 +178,6 @@ test('Components -> Container -> Mount with mint:false', t => {
           getState={s => s.smoothie}
           id={testId.id}
           mint={false}
-          mapboxApiAccessToken="hello.world"
         />
       </Provider>
     );
@@ -196,7 +190,6 @@ test('Components -> Container -> Mount with mint:false', t => {
     payload: {
       id: 'milkshake',
       mint: false,
-      mapboxApiAccessToken: 'hello.world',
       mapboxApiUrl: undefined,
       mapStylesReplaceDefault: undefined,
       initialUiState: undefined
@@ -213,8 +206,6 @@ test('Components -> Container -> Mount with mint:false', t => {
         ...initialCoreState,
         mapStyle: {
           ...initialCoreState.mapStyle,
-          // should replace access token
-          mapboxApiAccessToken: 'hello.world',
           mapboxApiUrl: DEFAULT_MAPBOX_API_URL
         }
       }
@@ -253,7 +244,6 @@ test('Components -> Container -> Mount then rename', t => {
         <Container
           getState={s => s.smoothie}
           id={testId.id}
-          mapboxApiAccessToken="hello.world"
           dispatch={dispatch}
           store={store}
         />
@@ -266,7 +256,6 @@ test('Components -> Container -> Mount then rename', t => {
     payload: {
       id: 'milkshake',
       mint: true,
-      mapboxApiAccessToken: 'hello.world',
       mapboxApiUrl: undefined,
       mapStylesReplaceDefault: undefined,
       initialUiState: undefined
@@ -281,9 +270,7 @@ test('Components -> Container -> Mount then rename', t => {
       milkshake: {
         ...initialCoreState,
         mapStyle: {
-          ...initialCoreState.mapStyle,
-          // should replace access token
-          mapboxApiAccessToken: 'hello.world'
+          ...initialCoreState.mapStyle
         }
       }
     }
@@ -295,7 +282,6 @@ test('Components -> Container -> Mount then rename', t => {
       <Container
         getState={s => s.smoothie}
         id={'milkshake-2'}
-        mapboxApiAccessToken="hello.world"
         dispatch={dispatch}
         store={store}
       />

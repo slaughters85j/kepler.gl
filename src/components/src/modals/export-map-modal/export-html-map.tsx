@@ -14,7 +14,7 @@ import {injectIntl} from 'react-intl';
 import {FormattedMessage} from '@kepler.gl/localization';
 import {IntlShape} from 'react-intl';
 
-import {setUserMapboxAccessToken, setExportHTMLMapMode, ActionHandler} from '@kepler.gl/actions';
+import {setExportHTMLMapMode, ActionHandler} from '@kepler.gl/actions';
 
 const ExportMapStyledExportSection = styled(StyledExportSection)`
   .disclaimer {
@@ -55,9 +55,7 @@ const BigStyledTile = styled(StyledType)`
 
 type ExportHtmlMapProps = {
   onChangeExportMapHTMLMode: ActionHandler<typeof setExportHTMLMapMode>;
-  onEditUserMapboxAccessToken: ActionHandler<typeof setUserMapboxAccessToken>;
   options: {
-    userMapboxToken?: string;
     mode?: string;
   };
 };
@@ -72,9 +70,6 @@ function ExportHtmlMapFactory(): React.ComponentType<ExportHtmlMapProps> {
     onChangeExportMapHTMLMode = () => {
       return;
     },
-    onEditUserMapboxAccessToken = () => {
-      return;
-    },
     options = {},
     intl
   }) => (
@@ -85,33 +80,6 @@ function ExportHtmlMapFactory(): React.ComponentType<ExportHtmlMapProps> {
           <FormattedMessage id={'modal.exportMap.html.selection'} />
         </div>
       </StyledExportMapSection>
-      <ExportMapStyledExportSection className="export-map-modal__html-options">
-        <div className="description">
-          <div className="title">
-            <FormattedMessage id={'modal.exportMap.html.tokenTitle'} />
-          </div>
-          <div className="subtitle">
-            <FormattedMessage id={'modal.exportMap.html.tokenSubtitle'} />
-          </div>
-        </div>
-        <div className="selection">
-          <StyledInput
-            onChange={e => onEditUserMapboxAccessToken(e.target.value)}
-            type="text"
-            placeholder={intl.formatMessage({id: 'modal.exportMap.html.tokenPlaceholder'})}
-            value={options ? options.userMapboxToken : ''}
-          />
-          <div className="disclaimer">
-            <StyledWarning>
-              <FormattedMessage id={'modal.exportMap.html.tokenMisuseWarning'} />
-            </StyledWarning>
-            <FormattedMessage id={'modal.exportMap.html.tokenDisclaimer'} />
-            <ExportMapLink href={EXPORT_HTML_MAP_DOC}>
-              <FormattedMessage id={'modal.exportMap.html.tokenUpdate'} />
-            </ExportMapLink>
-          </div>
-        </div>
-      </ExportMapStyledExportSection>
       <ExportMapStyledExportSection>
         <div className="description">
           <div className="title">

@@ -45,7 +45,7 @@ test('Components -> injector -> injectComponents', t => {
 
   const wrapper = mount(
     <Provider store={store}>
-      <KeplerGl id="foo" mapboxApiAccessToken="smoothie_and_milkshake" />
+      <KeplerGl id="foo" />
     </Provider>
   );
 
@@ -79,7 +79,7 @@ test('Components -> injector -> missing deps', t => {
 
   const wrapper = mount(
     <Provider store={store}>
-      <KeplerGl id="foo" mapboxApiAccessToken="smoothie_and_milkshake" />
+      <KeplerGl id="foo" />
     </Provider>
   );
 
@@ -113,7 +113,7 @@ test('Components -> injector -> wrong factory type', t => {
 
   const wrapper = mount(
     <Provider store={store}>
-      <KeplerGl id="foo" mapboxApiAccessToken="smoothie_and_milkshake" />
+      <KeplerGl id="foo" />
     </Provider>
   );
 
@@ -150,7 +150,7 @@ test('Components -> injector -> wrong replacement type', t => {
 
   const wrapper = mount(
     <Provider store={store}>
-      <KeplerGl id="foo" mapboxApiAccessToken="smoothie_and_milkshake" />
+      <KeplerGl id="foo" />
     </Provider>
   );
 
@@ -192,7 +192,7 @@ test('Components -> injector -> replace and render existing', t => {
   t.doesNotThrow(() => {
     wrapper = mount(
       <Provider store={store}>
-        <KeplerGl id="foo" mapboxApiAccessToken="smoothie_and_milkshake" />
+        <KeplerGl id="foo" />
       </Provider>
     );
   }, 'should not throw error when replace and render existing component');
@@ -217,7 +217,7 @@ test('Components -> injector -> withState.lens', t => {
 
   const wrapper = mount(
     <Provider store={store}>
-      <KeplerGl id="foo" mapboxApiAccessToken="smoothie_and_milkshake" />
+      <KeplerGl id="foo" />
     </Provider>
   );
 
@@ -250,7 +250,7 @@ test('Components -> injector -> withState.mapStateToProps', t => {
 
   const wrapper = mount(
     <Provider store={store}>
-      <KeplerGl id="foo" mapboxApiAccessToken="smoothie_and_milkshake" />
+      <KeplerGl id="foo" />
     </Provider>
   );
 
@@ -287,7 +287,7 @@ test('Components -> injector -> actions', t => {
 
   const wrapper = mount(
     <Provider store={store}>
-      <KeplerGl id="foo" mapboxApiAccessToken="smoothie_and_milkshake" />
+      <KeplerGl id="foo" />
     </Provider>
   );
 

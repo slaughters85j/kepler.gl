@@ -85,7 +85,6 @@ test('MapContainerFactory - display all options', t => {
 test('MapContainerFactory - _renderDeckOverlay', t => {
   const props = {
     ...initialProps,
-    mapboxApiAccessToken: 'pyx-11'
   };
   const store = mockStore(initialState);
 
@@ -190,7 +189,6 @@ test('MapContainerFactory - _renderDeckOverlay', t => {
           // asign info object to to state and test map popover
           const propsWithHoverInfo = {
             ...initialProps,
-            mapboxApiAccessToken: 'pyx-11',
             visState: {
               ...initialProps.visState,
               hoverInfo: hoverEvents[0].info,
@@ -228,7 +226,7 @@ test('MapContainerFactory - _renderDeckOverlay', t => {
 
           const table = wrapper.find('table').at(0);
           const rows = table.find('.layer-hover-info__row');
-          t.equal(rows.length, 5, 'should render 5 rows');
+          t.equal(rows.length, 5, 'rows.length should be 5');
 
           const expectedTooltips = [
             ['gps_data.utc_timestamp', '2016-09-17 00:24:24'],

@@ -62,7 +62,6 @@ test('#mapStyleReducer -> INIT', t => {
   const newState = reducer(
     InitialMapStyle,
     keplerGlInit({
-      mapboxApiAccessToken: 'smoothies_secret_token',
       mapboxApiUrl: 'http://mydomain.com'
     })
   );
@@ -72,10 +71,9 @@ test('#mapStyleReducer -> INIT', t => {
     {
       ...INITIAL_MAP_STYLE,
       initialState: {},
-      mapboxApiAccessToken: 'smoothies_secret_token',
       mapboxApiUrl: 'http://mydomain.com'
     },
-    'initialize map style with mapboxApiAccessToken'
+    'initialize map style without mapboxApiAccessToken'
   );
   t.end();
 });
@@ -83,9 +81,7 @@ test('#mapStyleReducer -> INIT', t => {
 test('#mapStyleReducer -> INIT & LOAD_MAP_STYLES', t => {
   const newState = reducer(
     InitialMapStyle,
-    keplerGlInit({
-      mapboxApiAccessToken: 'smoothies_secret_token'
-    })
+    keplerGlInit({})
   );
 
   t.deepEqual(
@@ -93,10 +89,9 @@ test('#mapStyleReducer -> INIT & LOAD_MAP_STYLES', t => {
     {
       ...INITIAL_MAP_STYLE,
       initialState: {},
-      mapboxApiAccessToken: 'smoothies_secret_token',
       mapboxApiUrl: DEFAULT_MAPBOX_API_URL
     },
-    'initialize map style with mapboxApiAccessToken and mapStylesReplaceDefault; mapStyles empty'
+    'initialize map style without mapboxApiAccessToken and mapStylesReplaceDefault; mapStyles empty'
   );
 
   const finalState = loadMapStylesUpdater(newState, {
@@ -142,7 +137,6 @@ test('#mapStyleReducer -> INIT & LOAD_MAP_STYLES ->  mapStylesReplaceDefault: tr
   const newState = reducer(
     InitialMapStyle,
     keplerGlInit({
-      mapboxApiAccessToken: 'smoothies_secret_token',
       mapStylesReplaceDefault: true
     })
   );
@@ -153,11 +147,10 @@ test('#mapStyleReducer -> INIT & LOAD_MAP_STYLES ->  mapStylesReplaceDefault: tr
       ...INITIAL_MAP_STYLE,
       mapStyles: {},
       initialState: {},
-      mapboxApiAccessToken: 'smoothies_secret_token',
       mapboxApiUrl: DEFAULT_MAPBOX_API_URL,
       mapStylesReplaceDefault: true
     },
-    'initialize map style with mapboxApiAccessToken and mapStylesReplaceDefault; mapStyles empty'
+    'initialize map style without mapboxApiAccessToken and mapStylesReplaceDefault; mapStyles empty'
   );
 
   const mapStyles = {
@@ -182,7 +175,7 @@ test("#mapStyleReducer -> RECEIVE_MAP_CONFIG (custom: 'LOCAL')", t => {
   drainTasksForTesting();
   const stateWithToken = reducer(
     InitialMapStyle,
-    keplerGlInit({mapboxApiAccessToken: 'smoothies_secret_token'})
+    keplerGlInit({})
   );
 
   const stateToSave = StateWCustomMapStyleLocal;
@@ -209,9 +202,8 @@ test("#mapStyleReducer -> RECEIVE_MAP_CONFIG (custom: 'LOCAL')", t => {
     topLayerGroups: {},
     mapStyles: {
       smoothie_the_cat: {
-        accessToken: 'secret_token',
         custom: 'LOCAL',
-        icon: 'https://api.mapbox.com/styles/v1/shanhe/smoothie.the.cat/static/-122.3391,37.7922,9,0,0/400x300?access_token=secret_token&logo=false&attribution=false',
+        icon: 'https://api.mapbox.com/styles/v1/shanhe/smoothie.the.cat/static/-122.3391,37.7922,9,0,0/400x300?logo=false&attribution=false',
         id: 'smoothie_the_cat',
         label: 'Smoothie the Cat',
         url: 'mapbox://styles/shanhe/smoothie.the.cat'
@@ -221,7 +213,6 @@ test("#mapStyleReducer -> RECEIVE_MAP_CONFIG (custom: 'LOCAL')", t => {
     isLoading: {
       smoothie_the_cat: true
     },
-    mapboxApiAccessToken: 'smoothies_secret_token',
     mapboxApiUrl: DEFAULT_MAPBOX_API_URL,
     mapStylesReplaceDefault: false,
     inputStyle: getInitialInputStyle(),
@@ -248,7 +239,7 @@ test("#mapStyleReducer -> RECEIVE_MAP_CONFIG (custom: 'LOCAL')", t => {
     payload: [
       {
         id: 'smoothie_the_cat',
-        url: 'https://api.mapbox.com/styles/v1/shanhe/smoothie.the.cat?pluginName=Keplergl&access_token=secret_token'
+        url: 'https://api.mapbox.com/styles/v1/shanhe/smoothie.the.cat?pluginName=Keplergl'
       }
     ]
   };
@@ -264,9 +255,8 @@ test("#mapStyleReducer -> RECEIVE_MAP_CONFIG (custom: 'LOCAL')", t => {
 
   const expectedMapStyles = {
     smoothie_the_cat: {
-      accessToken: 'secret_token',
       custom: 'LOCAL',
-      icon: 'https://api.mapbox.com/styles/v1/shanhe/smoothie.the.cat/static/-122.3391,37.7922,9,0,0/400x300?access_token=secret_token&logo=false&attribution=false',
+      icon: 'https://api.mapbox.com/styles/v1/shanhe/smoothie.the.cat/static/-122.3391,37.7922,9,0,0/400x300?logo=false&attribution=false',
       id: 'smoothie_the_cat',
       label: 'Smoothie the Cat',
       url: 'mapbox://styles/shanhe/smoothie.the.cat',
@@ -281,7 +271,6 @@ test("#mapStyleReducer -> RECEIVE_MAP_CONFIG (custom: 'LOCAL')", t => {
     visibleLayerGroups: {},
     topLayerGroups: {},
     mapStyles: expectedMapStyles,
-    mapboxApiAccessToken: 'smoothies_secret_token',
     mapboxApiUrl: DEFAULT_MAPBOX_API_URL,
     mapStylesReplaceDefault: false,
     inputStyle: getInitialInputStyle(),
@@ -323,9 +312,8 @@ test("#mapStyleReducer -> RECEIVE_MAP_CONFIG (custom: 'LOCAL')", t => {
         backgroundColor: [0, 0, 0],
         mapStyles: {
           smoothie_the_cat: {
-            accessToken: 'secret_token',
             custom: 'LOCAL',
-            icon: 'https://api.mapbox.com/styles/v1/shanhe/smoothie.the.cat/static/-122.3391,37.7922,9,0,0/400x300?access_token=secret_token&logo=false&attribution=false',
+            icon: 'https://api.mapbox.com/styles/v1/shanhe/smoothie.the.cat/static/-122.3391,37.7922,9,0,0/400x300?logo=false&attribution=false',
             id: 'smoothie_the_cat',
             label: 'Smoothie the Cat',
             url: 'mapbox://styles/shanhe/smoothie.the.cat'
@@ -352,7 +340,7 @@ test("#mapStyleReducer -> RECEIVE_MAP_CONFIG (custom: 'MANAGED')", t => {
   drainTasksForTesting();
   const stateWithToken = reducer(
     InitialMapStyle,
-    keplerGlInit({mapboxApiAccessToken: 'smoothies_secret_token'})
+    keplerGlInit({})
   );
 
   const stateToSave = StateWCustomMapStyleManaged;
@@ -379,9 +367,8 @@ test("#mapStyleReducer -> RECEIVE_MAP_CONFIG (custom: 'MANAGED')", t => {
     topLayerGroups: {},
     mapStyles: {
       smoothie_the_cat: {
-        accessToken: 'secret_token',
         custom: 'MANAGED',
-        icon: 'https://api.mapbox.com/styles/v1/shanhe/smoothie.the.cat/static/-122.3391,37.7922,9,0,0/400x300?access_token=secret_token&logo=false&attribution=false',
+        icon: 'https://api.mapbox.com/styles/v1/shanhe/smoothie.the.cat/static/-122.3391,37.7922,9,0,0/400x300?logo=false&attribution=false',
         id: 'smoothie_the_cat',
         label: 'Smoothie the Cat',
         url: 'mapbox://styles/shanhe/smoothie.the.cat'
@@ -391,7 +378,6 @@ test("#mapStyleReducer -> RECEIVE_MAP_CONFIG (custom: 'MANAGED')", t => {
     isLoading: {
       smoothie_the_cat: true
     },
-    mapboxApiAccessToken: 'smoothies_secret_token',
     mapboxApiUrl: DEFAULT_MAPBOX_API_URL,
     mapStylesReplaceDefault: false,
     inputStyle: getInitialInputStyle(),
@@ -453,7 +439,7 @@ test('#mapStyleReducer -> RECEIVE_MAP_CONFIG (custom: true (legacy backwards sup
   drainTasksForTesting();
   const stateWithToken = reducer(
     InitialMapStyle,
-    keplerGlInit({mapboxApiAccessToken: 'smoothies_secret_token'})
+    keplerGlInit({})
   );
 
   const stateToSave = StateWCustomMapStyleLegacy;
@@ -492,7 +478,6 @@ test('#mapStyleReducer -> RECEIVE_MAP_CONFIG (custom: true (legacy backwards sup
     isLoading: {
       smoothie_the_cat: true
     },
-    mapboxApiAccessToken: 'smoothies_secret_token',
     mapboxApiUrl: DEFAULT_MAPBOX_API_URL,
     mapStylesReplaceDefault: false,
     inputStyle: getInitialInputStyle(),
@@ -553,7 +538,6 @@ test('#mapStyleReducer -> RECEIVE_MAP_CONFIG (custom: true (legacy backwards sup
     visibleLayerGroups: {},
     topLayerGroups: {},
     mapStyles: expectedMapStyles,
-    mapboxApiAccessToken: 'smoothies_secret_token',
     mapboxApiUrl: DEFAULT_MAPBOX_API_URL,
     mapStylesReplaceDefault: false,
     inputStyle: getInitialInputStyle(),
@@ -624,9 +608,7 @@ test('#mapStyleReducer -> RECEIVE_MAP_CONFIG (custom: true (legacy backwards sup
 test('#mapStyleReducer -> MAP_STYLE_CHANGE', t => {
   const initialState = reducer(
     InitialMapStyle,
-    keplerGlInit({
-      mapboxApiAccessToken: 'smoothies_secret_token'
-    })
+    keplerGlInit({})
   );
 
   // loadMapStyles
@@ -780,9 +762,7 @@ test('#mapStyleReducer -> MAP_STYLE_CHANGE', t => {
 test('#mapStyleReducer -> MAP_STYLE_CHANGE -> dark basemap to no basemap', t => {
   const initialState = reducer(
     InitialMapStyle,
-    keplerGlInit({
-      mapboxApiAccessToken: 'smoothies_secret_token'
-    })
+    keplerGlInit({})
   );
 
   // loadMapStyles
@@ -815,9 +795,7 @@ test('#mapStyleReducer -> EDIT_CUSTOM_MAP_STYLE', t => {
   drainTasksForTesting();
   const stateWithToken = reducer(
     InitialMapStyle,
-    keplerGlInit({
-      mapboxApiAccessToken: 'smoothies_secret_token'
-    })
+    keplerGlInit({})
   );
 
   // state with custom style
@@ -871,9 +849,7 @@ test('#mapStyleReducer -> REMOVE_CUSTOM_MAP_STYLE -> removal of currently select
   drainTasksForTesting();
   const stateWithToken = reducer(
     InitialMapStyle,
-    keplerGlInit({
-      mapboxApiAccessToken: 'smoothies_secret_token'
-    })
+    keplerGlInit({})
   );
 
   // state with custom style which is also the active styleType

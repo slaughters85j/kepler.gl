@@ -180,12 +180,11 @@ function AddMapStyleModalFactory() {
       const mapboxApiAccessToken = inputStyle.accessToken;
       const mapProps = {
         ...mapState,
-        mapboxAccessToken: mapboxApiAccessToken,
         mapLib: baseMapLibraryConfig.getMapLib(),
         preserveDrawingBuffer: true,
         transformRequest:
-          this.props.transformRequest?.(/* REMOVED: mapboxApiAccessToken */) ||
-          transformRequest(/* REMOVED: mapboxApiAccessToken */)
+          this.props.transformRequest?.(/* REMOVED: mapboxKey */) ||
+          transformRequest(/* REMOVED: mapboxKey */)
       };
 
       return (

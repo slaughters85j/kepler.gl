@@ -44,7 +44,7 @@ const LIBRARY_BUNDLE_CONFIG = () => ({
     fs: 'empty'
   },
 
-  plugins: [new webpack.EnvironmentPlugin(['MapboxAccessToken']), new BundleAnalyzerPlugin()]
+  plugins: [new webpack.EnvironmentPlugin([]), new BundleAnalyzerPlugin()]
 });
 
 module.exports = env => LIBRARY_BUNDLE_CONFIG(env);

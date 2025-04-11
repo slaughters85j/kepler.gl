@@ -115,7 +115,6 @@ export interface Result {
 export type Results = ReadonlyArray<Result>;
 
 type GeocoderProps = {
-  mapboxApiAccessToken: string;
   className?: string;
   limit?: number;
   timeout?: number;
@@ -133,7 +132,6 @@ type IntlProps = {
 };
 
 const GeoCoder: React.FC<GeocoderProps & IntlProps> = ({
-  mapboxApiAccessToken,
   className = '',
   limit = 5,
   timeout = 300,
@@ -154,8 +152,12 @@ const GeoCoder: React.FC<GeocoderProps & IntlProps> = ({
   const [selectedIndex, setSelectedIndex] = useState(0);
 
   const client = useMemo(
-    () => (isTest() ? null : geocoderService({accessToken: mapboxApiAccessToken})),
-    [mapboxApiAccessToken]
+    () => {
+      // Removed Mapbox client initialization as it's no longer needed
+      // Return a mock client or null to satisfy dependencies if necessary
+      return null;
+    },
+    [] // Removed mapboxApiAccessToken dependency
   );
 
   const onChange = useCallback(
@@ -166,33 +168,14 @@ const GeoCoder: React.FC<GeocoderProps & IntlProps> = ({
       if (resultCoordinates[0]) {
         const [_isValid, longitude, latitude] = resultCoordinates;
         setResults([{center: [longitude, latitude], place_name: queryString}]);
+        setShowResults(true); // Show results for coordinates
       } else {
-        if (debounceTimeout) {
-          clearTimeout(debounceTimeout);
-        }
-        debounceTimeout = setTimeout(async () => {
-          if (limit > 0 && Boolean(queryString)) {
-            try {
-              const response = await client
-                .forwardGeocode({
-                  query: queryString,
-                  limit
-                })
-                .send();
-              if (response.body.features) {
-                setShowResults(true);
-                setResults(response.body.features);
-              }
-            } catch (e) {
-              // TODO: show geocode error
-              // eslint-disable-next-line no-console
-              console.log(e);
-            }
-          }
-        }, timeout);
+        // Removed geocoding API call logic
+        setResults([]); // Clear results if not coordinates
+        setShowResults(false); // Hide results dropdown if not coordinates
       }
     },
-    [client, limit, timeout, setResults, setShowResults]
+    [setResults, setShowResults] // Removed client, limit, timeout dependencies
   );
 
   const onBlur = useCallback(() => {

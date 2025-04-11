@@ -170,12 +170,10 @@ export function exportJson(state, options: any = {}) {
 }
 
 export function exportHtml(state, options) {
-  const {userMapboxToken, exportMapboxAccessToken, mode} = options;
+  const {mode} = options;
 
   const data = {
     ...getMapJSON(state),
-    mapboxApiAccessToken:
-      (userMapboxToken || '') !== '' ? userMapboxToken : exportMapboxAccessToken,
     mode
   };
 

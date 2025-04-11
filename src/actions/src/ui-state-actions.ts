@@ -380,26 +380,6 @@ export const setExportData: () => {type: typeof ActionTypes.SET_EXPORT_DATA} = c
   ActionTypes.SET_EXPORT_DATA
 );
 
-/** SET_USER_MAPBOX_ACCESS_TOKEN */
-export type SetUserMapboxAccessTokenUpdaterAction = {
-  payload: string;
-};
-/**
- * Whether we export a mapbox access token used to create a single map html file
- * @memberof uiStateActions
- * @param payload - mapbox access token
- * @public
- */
-export const setUserMapboxAccessToken: (
-  payload: SetUserMapboxAccessTokenUpdaterAction['payload']
-) => Merge<
-  SetUserMapboxAccessTokenUpdaterAction,
-  {type: typeof ActionTypes.SET_USER_MAPBOX_ACCESS_TOKEN}
-> = createAction(
-  ActionTypes.SET_USER_MAPBOX_ACCESS_TOKEN,
-  (payload: SetUserMapboxAccessTokenUpdaterAction['payload']) => ({payload})
-);
-
 /** SET_EXPORT_MAP_FORMAT */
 export type SetExportMapFormatUpdaterAction = {
   payload: string;

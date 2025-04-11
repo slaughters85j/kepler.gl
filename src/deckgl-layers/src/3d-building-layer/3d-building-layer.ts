@@ -33,7 +33,7 @@ export default class ThreeDBuildingLayer extends CompositeLayer<ThreeDBuildingLa
       new DeckGLTileLayer({
         id: `${this.id}-deck-3d-building` as string,
         getTileData: (tile: TileLoadProps) =>
-          getTileData(this.props.mapboxApiUrl, this.props.mapboxApiAccessToken, tile),
+          getTileData(this.props.mapboxApiUrl, tile),
         minZoom: 13,
         renderSubLayers: this.renderSubLayers.bind(this),
         updateTriggers: this.props.updateTriggers

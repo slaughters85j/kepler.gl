@@ -323,7 +323,6 @@ export function getCustomDeckLayers(deckGlProps?: any): [CustomDeckLayer[], Cust
 
 export type ComputeDeckLayersProps = {
   mapIndex?: number;
-  mapboxApiAccessToken?: string;
   mapboxApiUrl?: string;
   primaryMap?: boolean;
   layersForDeck?: {[key: string]: boolean};
@@ -376,7 +375,7 @@ export function computeDeckLayers(
     splitMaps
   } = visState;
 
-  const {mapIndex, mapboxApiAccessToken, mapboxApiUrl, primaryMap, layersForDeck, editorInfo} =
+  const {mapIndex, mapboxApiUrl, primaryMap, layersForDeck, editorInfo} =
     options || {};
 
   let dataLayers: any[] = [];
@@ -423,18 +422,18 @@ export function computeDeckLayers(
   if (
     mapStyle?.visibleLayerGroups['3d building'] &&
     primaryMap &&
-    mapboxApiAccessToken &&
     mapboxApiUrl
   ) {
     dataLayers.push(
       new ThreeDBuildingLayer({
         id: '_keplergl_3d-building',
-        mapboxApiAccessToken,
         mapboxApiUrl,
         threeDBuildingColor: mapStyle.threeDBuildingColor,
         updateTriggers: {
           getFillColor: mapStyle.threeDBuildingColor
-        }
+        },
+        opacity: mapStyle.visibleLayerGroups['3d building'] === true ? 1 : 0,
+        visible: mapStyle.visibleLayerGroups['3d building']
       })
     );
   }

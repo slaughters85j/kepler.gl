@@ -66,7 +66,6 @@ const mapStyles = [{
 
 const App = () => (
   <KeplerGl 
-    mapboxApiAccessToken="" 
     mapStyles={mapStyles}
     mapStylesReplaceDefault={true} 
     id="map"
@@ -76,7 +75,6 @@ const App = () => (
 
 - `mapStyles` (Array) array of custom map styles.
 - `mapStylesReplaceDefault` (Boolean) pass `true` if you want to replace all default kepler.gl base map options.
-- `mapboxApiAccessToken`. Optional if `mapStylesReplaceDefault` is `true` and your `mapStyles` does not use Mapbox services
 
 #### Option 2. Reducer `initialState`
 Pass custom `mapStyles` to kepler.gl `mapStyle` reducer using the `initialState` plugin. And set default style by passing `styleType`.
@@ -122,10 +120,6 @@ const customizedKeplerGlReducer = keplerGlReducer.initialState({
 - `styleType` (string) - Initial map style. 
 
 __Which option is for me?__ If you want to replace all basemap styles, we recommends __Option 2__. So you can also set the initial style with `styleType`. If you are adding more options as basemaps, __Option 1__ is ideal.
-
-### 3. `mapboxApiAccessToken`
-If your map styles are not using Mapbox services, and you replaced all kepler.gl default map styles. `mapboxApiAccessToken` will not be required in `KeplerGl` component.
-
 
 #### 4. `DEFAULT_LAYER_GROUPS`
 

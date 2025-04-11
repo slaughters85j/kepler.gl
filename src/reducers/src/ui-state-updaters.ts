@@ -183,13 +183,11 @@ export const DEFAULT_NOTIFICATIONS = [];
 
 /**
  * @constant
- * @property exportMapboxAccessToken - Default: null, this is used when we provide a default mapbox token for users to take advantage of
  * @property userMapboxToken - Default: '', mapbox token provided by user through input field
  * @property mode - Default: 'READ', read only or editable
  * @public
  */
 export const DEFAULT_EXPORT_HTML: ExportHtml = {
-  exportMapboxAccessToken: null,
   userMapboxToken: '',
   mode: EXPORT_HTML_MAP_MODES.READ
 };
@@ -658,29 +656,8 @@ export const setExportDataUpdater = (state: UiState): UiState => ({
       ...state.exportMap[EXPORT_MAP_FORMATS.JSON],
       hasData: !state.exportMap[EXPORT_MAP_FORMATS.JSON].hasData
     }
-  }
-});
-
-/**
- * whether to export a mapbox access to HTML single page
- * @param state - `uiState`
- * @param action
- * @param action.payload
- * @returns nextState
- * @public
- */
-export const setUserMapboxAccessTokenUpdater = (
-  state: UiState,
-  {payload: userMapboxToken}: UIStateActions.SetUserMapboxAccessTokenUpdaterAction
-): UiState => ({
-  ...state,
-  exportMap: {
-    ...state.exportMap,
-    [EXPORT_MAP_FORMATS.HTML]: {
-      ...state.exportMap[EXPORT_MAP_FORMATS.HTML],
-      userMapboxToken
-    }
-  }
+  },
+  currentModal: null
 });
 
 /**

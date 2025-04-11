@@ -9,7 +9,8 @@ import {
   FlatFigure,
   TileDataItem,
   VectorTileFeature,
-  VectorTileFeatureProperties
+  VectorTileFeatureProperties,
+  TileLoadProps
 } from './types';
 
 /* global fetch */
@@ -17,8 +18,9 @@ const TILE_SIZE = 512;
 
 export function getTileData(
   host: string,
-  {index: {x, y, z}}: {index: Coordinates}
+  tile: TileLoadProps
 ): Promise<TileDataItem[]> {
+  const {index: {x, y, z}} = tile;
   const mapSource = `${host}/tiles/${z}/${x}/${y}.vector.pbf`;
 
   return fetch(mapSource)

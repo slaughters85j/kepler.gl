@@ -12,7 +12,7 @@
 
 ![map styles](https://d1a3f4spazzrp4.cloudfront.net/kepler.gl/documentation/f-map-styles-0.png "Map panel")
 
-kepler.gl provide a set of [Mapbox](https://www.mapbox.com) basemap styles as background map, including 3D buildings! You can also add your own custom map sytle using the Mapbox style link.
+kepler.gl provide a set of basemap styles as background map, including 3D buildings! You can also add your own custom map sytle using a style URL.
 
 ## Base Map Styles
 
@@ -54,7 +54,7 @@ __TIP__: Move labels to the top on maps with colored layers to keep the labels f
 ## Custom Map Styles
 ![Add Custom Mapbox Styles button](https://d1a3f4spazzrp4.cloudfront.net/kepler.gl/documentation/image45.png "Add Custom Mapbox Styles button")
 
-To add a custom base map style, click the add map style button to open the custom map style modal, paste in the mapbox [style Url](https://www.mapbox.com/help/studio-manual-publish/#style-url). Note that you need to paste in your [mapbox access token](https://www.mapbox.com/account/) if your style is not [published](https://www.mapbox.com/help/studio-manual-publish/#style-url).
+To add a custom base map style, click the add map style button to open the custom map style modal, paste in the style URL.
 
 
 ![Add Custom Mapbox Styles popup](https://d1a3f4spazzrp4.cloudfront.net/kepler.gl/documentation/image13.png "Add Custom Mapbox Styles popup")

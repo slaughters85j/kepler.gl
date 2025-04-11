@@ -12,7 +12,6 @@ import {cmpDatasetData, cmpObjectKeys} from '../../helpers/comparison-utils';
 import {InitialState} from 'test/helpers/mock-state';
 
 const GeocoderPanel = appInjector.get(GeocoderPanelFactory);
-const MAPBOX_TOKEN = 'pk.eyJ1Ijoi.d9YD6z';
 
 test('GeocoderPanel - render', t => {
   const enabled = true;
@@ -134,7 +133,6 @@ test('GeocoderPanel - render', t => {
       <IntlWrapper>
         <GeocoderPanel
           isGeocoderEnabled={enabled}
-          mapboxApiAccessToken={MAPBOX_TOKEN}
           mapState={mockMapState}
           uiState={mockUiState}
           updateVisData={updateVisData}

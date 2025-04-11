@@ -361,11 +361,9 @@ export const initMapStyleUpdater = (
   }
 ): MapStyle => ({
   ...state,
-  mapboxApiUrl: payload.mapboxApiUrl || state.mapboxApiUrl,
-  mapStyles: !payload.mapStylesReplaceDefault ? state.mapStyles : {},
-  mapStylesReplaceDefault: payload.mapStylesReplaceDefault || false
+  ...(payload.mapboxApiUrl ? {mapboxApiUrl: payload.mapboxApiUrl} : {}),
+  ...(payload.mapStylesReplaceDefault ? {mapStylesReplaceDefault: payload.mapStylesReplaceDefault} : {})
 });
-// });
 
 /**
  * Update `visibleLayerGroups`to change layer group visibility
@@ -587,36 +585,27 @@ export const receiveMapConfigUpdater = (
 };
 
 function getLoadMapStyleTasks(mapStyles, mapboxApiUrl, onSuccess) {
-  return [
-    Task.all(
-      Object.values(mapStyles)
-        // @ts-expect-error
-        .map(({id, url}) => ({
-          id,
-          url: getStyleDownloadUrl(url)
-        }))
-        .map(LOAD_MAP_STYLE_TASK)
-    ).bimap(
-      // success
-      results =>
-        loadMapStyles(
-          results.reduce(
-            (accu, {id, style}) => ({
-              ...accu,
-              [id]: {
-                ...mapStyles[id],
-                style
-              }
-            }),
-            {}
-          ),
-          onSuccess
-        ),
-      // error
-      err => loadMapStyleErr(Object.keys(mapStyles), err)
-    )
-  ];
+  const loadMapStyleTasks: any[] = Object.values(mapStyles)
+    .filter((ms: any) => ms.url && ms.id !== NO_MAP_ID)
+    .map((ms: any) =>
+      Task.all([
+        Task.resolve(ms.id),
+        LOAD_MAP_STYLE_TASK({
+          url: getStyleDownloadUrl(ms.url),
+          id: ms.id,
+          // style.accessToken shouldn't be required, if leaked, should be rotated
+          mapToLoad: ms
+        })
+      ]).bimap(
+        error => loadMapStyleErr([ms.id], error),
+        result => loadMapStyles({[result[0]]: {...ms, ...result[1]}}),
+        onSuccess
+      )
+    );
+
+  return loadMapStyleTasks;
 }
+
 /**
  * Reset map style config to initial state
  * @memberof mapStyleUpdaters

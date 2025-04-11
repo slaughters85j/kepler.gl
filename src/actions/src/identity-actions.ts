@@ -9,7 +9,6 @@ export type RegisterEntryUpdaterAction = {
   payload: {
     id: string;
     mint?: boolean;
-    mapboxApiAccessToken?: string;
     mapboxApiUrl?: string;
     mapStylesReplaceDefault?: boolean;
     initialUiState?: Partial<UiState>;
@@ -32,7 +31,6 @@ export type RenameEntryUpdaterAction = {
  * @param payload.id - ***required** The id of the instance
  * @param payload.mint - Whether to use a fresh empty state, when `mint: true` it will *always* load a fresh state when the component is re-mounted.
  * When `mint: false` it will register with existing instance state under the same `id`, when the component is unmounted then mounted again. Default: `true`
- * @param payload.mapboxApiAccessToken - mapboxApiAccessToken to be saved in `map-style` reducer.
  * @param payload.mapboxApiUrl - mapboxApiUrl to be saved in `map-style` reducer.
  * @param payload.mapStylesReplaceDefault - mapStylesReplaceDefault to be saved in `map-style` reducer.
  * @param payload.initialUiState - initial ui state

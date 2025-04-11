@@ -71,7 +71,6 @@ const App = () => (
     <KeplerGl
       id="map"
       localeMessages={messages}
-      mapboxApiAccessToken={Token}
     />
 );
 ```
@@ -89,7 +88,6 @@ const App = () => (
     <KeplerGl
       id="map"
       localeMessages={messages}
-      mapboxApiAccessToken={Token}
     />
 );
 ```

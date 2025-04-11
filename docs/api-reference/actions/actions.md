@@ -68,7 +68,6 @@
   - [setExportImageDataUri][122]
   - [setExportImageSetting][124]
   - [setExportSelectedDataset][126]
-  - [setUserMapboxAccessToken][128]
   - [showExportDropdown][130]
   - [startExportingImage][132]
   - [toggleMapControl][133]
@@ -114,7 +113,7 @@ const MapContainer = props => (
 
 const mapDispatchToProps = (dispatch, props) => ({
  dispatch,
- keplerGlDispatch: forwardTo(‘foo’, dispatch)
+ keplerGlDispatch: forwardTo('foo', dispatch)
 });
 
 export default connect(
@@ -437,17 +436,17 @@ this.props.dispatch(
 
 ### keplerGlInit
 
-Initialize kepler.gl reducer. It is used to pass in `mapboxApiAccessToken` to `mapStyle` reducer.
+Initialize kepler.gl reducer. It is used to pass in initialization flags to reducer
 
 - **ActionTypes**: [`ActionTypes.INIT`][12]
-- **Updaters**: [`mapStyleUpdaters.initMapStyleUpdater`][177]
+- **Updaters**: [`mapStyleUpdaters.initMapStyleUpdater`][171]
 
 **Parameters**
 
-- `payload` **[Object][164]**
-  - `payload.mapboxApiAccessToken` **[string][162]** mapboxApiAccessToken to be saved to mapStyle reducer
-  - `payload.mapboxApiUrl` **[string][162]** mapboxApiUrl to be saved to mapStyle reducer.
-  - `payload.mapStylesReplaceDefault` **[Boolean][165]** mapStylesReplaceDefault to be saved to mapStyle reducer
+-   `payload` **[object][164]**
+    -   `payload.mapboxApiUrl` **[string][162]?** mapboxApiUrl to be saved to mapStyle reducer.
+    -   `payload.mapStylesReplaceDefault` **[boolean][165]?** mapStylesReplaceDefault to be saved to mapStyle reducer
+    -   `payload.initialUiState` **Partial<UiState>?** initial ui state
 
 ### receiveMapConfig
 
@@ -1072,17 +1071,6 @@ Set selected dataset for export
 
 - `datasetId` **[string][162]** dataset id
 
-### setUserMapboxAccessToken
-
-Whether we export a mapbox access token used to create a single map html file
-
-- **ActionTypes**: [`ActionTypes.SET_USER_MAPBOX_ACCESS_TOKEN`][12]
-- **Updaters**: [`uiStateUpdaters.setUserMapboxAccessTokenUpdater`][231]
-
-**Parameters**
-
-- `payload` **[string][162]** mapbox access token
-
 ### showExportDropdown
 
 Hide and show side panel header dropdown, activated by clicking the share link on top of the side panel
@@ -1175,9 +1163,9 @@ performed. Instance reducer can only handle actions when it is instantiated.
   - `payload.id` **[string][162]** **\*required** The id of the instance
   - `payload.mint` **[boolean][165]** Whether to use a fresh empty state, when `mint: true` it will _always_ load a fresh state when the component is re-mounted.
     When `mint: false` it will register with existing instance state under the same `id`, when the component is unmounted then mounted again. Default: `true`
-  - `payload.mapboxApiAccessToken` **[string][162]** mapboxApiAccessToken to be saved in `map-style` reducer.
   - `payload.mapboxApiUrl` **[string][162]** mapboxApiUrl to be saved in `map-style` reducer.
   - `payload.mapStylesReplaceDefault` **[Boolean][165]** mapStylesReplaceDefault to be saved in `map-style` reducer.
+  - `payload.initialUiState` **Partial<UiState>?** initial ui state
 
 ### renameEntry
 
@@ -1426,37 +1414,37 @@ Set the export map format (html, json)
 [125]: #parameters-52
 [126]: #setexportselecteddataset
 [127]: #parameters-53
-[128]: #setusermapboxaccesstoken
+[128]: #showexportdropdown
 [129]: #parameters-54
-[130]: #showexportdropdown
-[131]: #parameters-55
-[132]: #startexportingimage
-[133]: #togglemapcontrol
+[130]: #startexportingimage
+[131]: #togglemapcontrol
+[132]: #parameters-55
+[133]: #togglemodal
 [134]: #parameters-56
-[135]: #togglemodal
+[135]: #togglesidepanel
 [136]: #parameters-57
-[137]: #togglesidepanel
-[138]: #parameters-58
-[139]: #rootactions
-[140]: #deleteentry
+[137]: #rootactions
+[138]: #deleteentry
+[139]: #parameters-58
+[140]: #registerentry
 [141]: #parameters-59
-[142]: #registerentry
+[142]: #renameentry
 [143]: #parameters-60
-[144]: #renameentry
-[145]: #parameters-61
-[146]: #mapstateactions
-[147]: #fitbounds
-[148]: #parameters-62
-[149]: #examples-7
-[150]: #toggleperspective
-[151]: #examples-8
-[152]: #togglesplitmap
-[153]: #parameters-63
-[154]: #examples-9
-[155]: #updatemap
-[156]: #parameters-64
-[157]: #examples-10
-[158]: #layercoloruichange
+[144]: #mapstateactions
+[145]: #fitbounds
+[146]: #parameters-61
+[147]: #examples-7
+[148]: #toggleperspective
+[149]: #examples-8
+[150]: #togglesplitmap
+[151]: #parameters-62
+[152]: #examples-9
+[153]: #updatemap
+[154]: #parameters-63
+[155]: #examples-10
+[156]: #layercoloruichange
+[157]: #parameters-64
+[158]: #setexportmapformat
 [159]: #parameters-65
 [160]: #setexportmapformat
 [161]: #parameters-66
@@ -1469,70 +1457,70 @@ Set the export map format (html, json)
 [168]: ../reducers/map-style.md#mapstyleupdatersloadcustommapstyleupdater
 [169]: ../reducers/map-style.md#mapstyleupdatersloadmapstyleerrupdater
 [170]: ../reducers/map-style.md#mapstyleupdatersloadmapstylesupdater
-[171]: ../reducers/map-style.md#mapstyleupdatersmapconfigchangeupdater
+[171]: ../reducers/map-style.md#mapstyleupdatersinitmapstyleupdater
 [172]: ../reducers/map-style.md#mapstyleupdatersmapstylechangeupdater
 [173]: ../reducers/map-style.md#mapstyleupdatersrequestmapstylesupdater
 [174]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array
 [175]: ../reducers/map-style.md#mapstyleupdatersset3dbuildingcolorupdater
 [176]: ../reducers/composers.md#combinedupdatersadddatatomapupdater
-[177]: ../reducers/map-style.md#mapstyleupdatersinitmapstyleupdater
-[178]: ../reducers/map-state.md#mapstateupdatersreceivemapconfigupdater
-[179]: ../reducers/map-style.md#mapstyleupdatersreceivemapconfigupdater
-[180]: ../reducers/vis-state.md#visstateupdatersreceivemapconfigupdater
-[181]: ../reducers/map-state.md#mapstateupdatersresetmapconfigupdater
-[182]: ../reducers/map-style.md#mapstyleupdatersresetmapconfigmapstyleupdater
-[183]: ../reducers/vis-state.md#visstateupdatersresetmapconfigupdater
-[184]: ../reducers/vis-state.md#visstateupdatersaddfilterupdater
-[185]: ../reducers/vis-state.md#visstateupdatersaddlayerupdater
-[186]: ../reducers/vis-state.md#visstateupdatersapplycpufilterupdater
-[187]: ../reducers/vis-state.md#visstateupdatersenlargefilterupdater
+[177]: ../reducers/map-state.md#mapstateupdatersreceivemapconfigupdater
+[178]: ../reducers/map-style.md#mapstyleupdatersreceivemapconfigupdater
+[179]: ../reducers/vis-state.md#visstateupdatersreceivemapconfigupdater
+[180]: ../reducers/map-state.md#mapstateupdatersresetmapconfigupdater
+[181]: ../reducers/map-style.md#mapstyleupdatersresetmapconfigmapstyleupdater
+[182]: ../reducers/vis-state.md#visstateupdatersresetmapconfigupdater
+[183]: ../reducers/vis-state.md#visstateupdatersaddfilterupdater
+[184]: ../reducers/vis-state.md#visstateupdatersaddlayerupdater
+[185]: ../reducers/vis-state.md#visstateupdatersapplycpufilterupdater
+[186]: ../reducers/vis-state.md#visstateupdatersenlargefilterupdater
+[187]: ../reducers/vis-state.md#visstateupdatersinteractionconfigchangeupdater
 [188]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number
-[189]: ../reducers/vis-state.md#visstateupdatersinteractionconfigchangeupdater
-[190]: ../reducers/vis-state.md#visstateupdaterslayerconfigchangeupdater
-[191]: ../reducers/vis-state.md#visstateupdaterslayertextlabelchangeupdater
-[192]: ../reducers/vis-state.md#visstateupdaterslayertypechangeupdater
-[193]: ../reducers/vis-state.md#visstateupdaterslayervisconfigchangeupdater
-[194]: ../reducers/vis-state.md#visstateupdaterslayervisualchannelchangeupdater
-[195]: ../reducers/ui-state.md#uistateupdatersloadfilesupdater
-[196]: ../reducers/vis-state.md#visstateupdatersloadfilesupdater
-[197]: ../reducers/ui-state.md#uistateupdatersloadfileserrupdater
-[198]: ../reducers/vis-state.md#visstateupdatersloadfileserrupdater
-[199]: ../reducers/vis-state.md#visstateupdaterslayerclickupdater
-[200]: ../reducers/vis-state.md#visstateupdaterslayerhoverupdater
-[201]: ../reducers/vis-state.md#visstateupdatersmapclickupdater
-[202]: https://visgl.github.io/react-map-gl/docs/api-reference/types#maplayermouseevent
-[203]: ../reducers/vis-state.md#visstateupdatersmousemoveupdater
-[204]: ../reducers/vis-state.md#visstateupdatersremovedatasetupdater
-[205]: ../reducers/vis-state.md#visstateupdatersremovefilterupdater
-[206]: ../reducers/vis-state.md#visstateupdatersremovelayerupdater
-[207]: ../reducers/vis-state.md#visstateupdatersreorderlayerupdater
-[208]: ../reducers/vis-state.md#visstateupdatersseteditormodeupdater
-[209]: ../reducers/vis-state.md#visstateupdaterssetfilterupdater
-[210]: ../reducers/vis-state.md#visstateupdaterssetfilterplotupdater
-[211]: ../reducers/vis-state.md#visstateupdaterssetmapinfoupdater
-[212]: ../reducers/vis-state.md#visstateupdatersshowdatasettableupdater
-[213]: ../reducers/vis-state.md#visstateupdaterstogglefilteranimationupdater
-[214]: ../reducers/vis-state.md#visstateupdaterstogglelayerformapupdater
-[215]: ../reducers/vis-state.md#visstateupdatersupdateanimationtimeupdater
-[216]: ../reducers/vis-state.md#visstateupdatersupdatefilteranimationspeedupdater
-[217]: ../reducers/vis-state.md#visstateupdatersupdatelayeranimationspeedupdater
-[218]: ../reducers/vis-state.md#visstateupdatersupdatelayerblendingupdater
-[219]: ../reducers/vis-state.md#visstateupdatersupdatevisdataupdater
-[220]: ../reducers/ui-state.md#uistateupdatersaddnotificationupdater
-[221]: ../reducers/ui-state.md#uistateupdaterscleanupexportimage
-[222]: ../reducers/ui-state.md#uistateupdatershideexportdropdownupdater
-[223]: ../reducers/ui-state.md#uistateupdatersopendeletemodalupdater
-[224]: ../reducers/ui-state.md#uistateupdatersremovenotificationupdater
-[225]: ../reducers/ui-state.md#uistateupdaterssetexportdataupdater
-[226]: ../reducers/ui-state.md#uistateupdaterssetexportdatatypeupdater
-[227]: ../reducers/ui-state.md#uistateupdaterssetexportfilteredupdater
-[228]: ../reducers/ui-state.md#uistateupdaterssetexportimagedatauri
-[229]: ../reducers/ui-state.md#uistateupdaterssetexportimagesetting
-[230]: ../reducers/ui-state.md#uistateupdaterssetexportselecteddatasetupdater
-[231]: ../reducers/ui-state.md#uistateupdaterssetusermapboxaccesstokenupdater
-[232]: ../reducers/ui-state.md#uistateupdatersshowexportdropdownupdater
-[233]: ../reducers/ui-state.md#uistateupdatersstartexportingimage
-[234]: ../reducers/ui-state.md#uistateupdaterstogglemapcontrolupdater
+[189]: ../reducers/vis-state.md#visstateupdaterslayerconfigchangeupdater
+[190]: ../reducers/vis-state.md#visstateupdaterslayertextlabelchangeupdater
+[191]: ../reducers/vis-state.md#visstateupdaterslayertypechangeupdater
+[192]: ../reducers/vis-state.md#visstateupdaterslayervisconfigchangeupdater
+[193]: ../reducers/vis-state.md#visstateupdaterslayervisualchannelchangeupdater
+[194]: ../reducers/ui-state.md#uistateupdatersloadfilesupdater
+[195]: ../reducers/vis-state.md#visstateupdatersloadfilesupdater
+[196]: ../reducers/ui-state.md#uistateupdatersloadfileserrupdater
+[197]: ../reducers/vis-state.md#visstateupdatersloadfileserrupdater
+[198]: ../reducers/vis-state.md#visstateupdaterslayerclickupdater
+[199]: ../reducers/vis-state.md#visstateupdaterslayerhoverupdater
+[200]: ../reducers/vis-state.md#visstateupdatersmapclickupdater
+[201]: https://visgl.github.io/react-map-gl/docs/api-reference/types#maplayermouseevent
+[202]: ../reducers/vis-state.md#visstateupdatersmousemoveupdater
+[203]: ../reducers/vis-state.md#visstateupdatersremovedatasetupdater
+[204]: ../reducers/vis-state.md#visstateupdatersremovefilterupdater
+[205]: ../reducers/vis-state.md#visstateupdatersremovelayerupdater
+[206]: ../reducers/vis-state.md#visstateupdatersreorderlayerupdater
+[207]: ../reducers/vis-state.md#visstateupdatersseteditormodeupdater
+[208]: ../reducers/vis-state.md#visstateupdaterssetfilterupdater
+[209]: ../reducers/vis-state.md#visstateupdaterssetfilterplotupdater
+[210]: ../reducers/vis-state.md#visstateupdaterssetmapinfoupdater
+[211]: ../reducers/vis-state.md#visstateupdatersshowdatasettableupdater
+[212]: ../reducers/vis-state.md#visstateupdaterstogglefilteranimationupdater
+[213]: ../reducers/vis-state.md#visstateupdaterstogglelayerformapupdater
+[214]: ../reducers/vis-state.md#visstateupdatersupdateanimationtimeupdater
+[215]: ../reducers/vis-state.md#visstateupdatersupdatefilteranimationspeedupdater
+[216]: ../reducers/vis-state.md#visstateupdatersupdatelayeranimationspeedupdater
+[217]: ../reducers/vis-state.md#visstateupdatersupdatelayerblendingupdater
+[218]: ../reducers/vis-state.md#visstateupdatersupdatevisdataupdater
+[219]: ../reducers/ui-state.md#uistateupdatersaddnotificationupdater
+[220]: ../reducers/ui-state.md#uistateupdaterscleanupexportimage
+[221]: ../reducers/ui-state.md#uistateupdatershideexportdropdownupdater
+[222]: ../reducers/ui-state.md#uistateupdatersopendeletemodalupdater
+[223]: ../reducers/ui-state.md#uistateupdatersremovenotificationupdater
+[224]: ../reducers/ui-state.md#uistateupdaterssetexportdataupdater
+[225]: ../reducers/ui-state.md#uistateupdaterssetexportdatatypeupdater
+[226]: ../reducers/ui-state.md#uistateupdaterssetexportfilteredupdater
+[227]: ../reducers/ui-state.md#uistateupdaterssetexportimagedatauri
+[228]: ../reducers/ui-state.md#uistateupdaterssetexportimagesetting
+[229]: ../reducers/ui-state.md#uistateupdaterssetexportselecteddatasetupdater
+[230]: ../reducers/ui-state.md#uistateupdatersshowexportdropdownupdater
+[231]: ../reducers/ui-state.md#uistateupdatersstartexportingimage
+[232]: ../reducers/ui-state.md#uistateupdaterstogglemapcontrolupdater
+[233]: ../reducers/ui-state.md#uistateupdaterstogglemodalupdater
+[234]: ../reducers/ui-state.md#uistateupdaterstogglesidepanelupdater
 [235]: #default_map_controls
 [236]: ../reducers/ui-state.md#uistateupdaterstogglemodalupdater
 [237]: ../constants/default-settings.md#data_table_id

@@ -396,7 +396,6 @@ export type ExportData = {
 };
 
 export type ExportHtml = {
-  exportMapboxAccessToken: null | string;
   userMapboxToken: string;
   mode: string;
 };

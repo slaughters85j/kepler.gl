@@ -169,16 +169,14 @@ export const receiveMapConfig: (
 );
 
 export type KeplerGlInitPayload = {
-  mapboxApiAccessToken?: string;
   mapboxApiUrl?: string;
   mapStylesReplaceDefault?: boolean;
   initialUiState?: Partial<UiState>;
 };
 /**
- * Initialize kepler.gl reducer. It is used to pass in `mapboxApiAccessToken` to `mapStyle` reducer.
+ * Initialize kepler.gl reducer. It is used to pass in initialization flags to reducer
  * @memberof main
  * @param {object} payload
- * @param payload.mapboxApiAccessToken - mapboxApiAccessToken to be saved to mapStyle reducer
  * @param payload.mapboxApiUrl - mapboxApiUrl to be saved to mapStyle reducer.
  * @param payload.mapStylesReplaceDefault - mapStylesReplaceDefault to be saved to mapStyle reducer
  * @param payload.initialUiState - initial ui state

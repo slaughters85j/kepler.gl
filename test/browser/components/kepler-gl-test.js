@@ -38,7 +38,7 @@ const NotificationPanel = appInjector.get(NotificationPanelFactory);
 
 const initialCoreState = coreReducer(
   undefined,
-  keplerGlInit({mapboxApiAccessToken: 'smoothie-the-cat'})
+  keplerGlInit()
 );
 
 const initialState = {
@@ -60,7 +60,6 @@ test('Components -> KeplerGl -> Mount', t => {
       <Provider store={store}>
         <KeplerGl
           id="map"
-          mapboxApiAccessToken="smoothie-the-cat"
           selector={state => state.keplerGl.map}
           dispatch={store.dispatch}
         />
@@ -103,7 +102,6 @@ test('Components -> KeplerGl -> Mount -> readOnly', t => {
       <Provider store={store}>
         <KeplerGl
           id="map"
-          mapboxApiAccessToken="smoothie-the-cat"
           selector={state => state.keplerGl.map}
           dispatch={store.dispatch}
         />

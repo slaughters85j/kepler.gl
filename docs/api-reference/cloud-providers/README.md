@@ -54,7 +54,6 @@ class MyProvider extends Provider {
 const myProvider = new MyProvider();
 const App = () =>
     <KeplerGl
-        mapboxApiAccessToken={CLOUD_PROVIDERS_CONFIGURATION.MAPBOX_TOKEN}
         id="map"
         cloudProviders={[myProvider]}
     />

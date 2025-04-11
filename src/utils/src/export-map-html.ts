@@ -7,7 +7,6 @@ import {EXPORT_HTML_MAP_MODES, KEPLER_GL_VERSION} from '@kepler.gl/constants';
 /**
  * This method is used to create an html file which will inlcude kepler and map data
  * @param {Object} options Object that collects all necessary data to  create the html file
- * @param {string} options.mapboxApiAccessToken Mapbox token used to fetch mapbox tiles
  * @param {Array<Object>} options.datasets Data to include in the map
  * @param {Object} options.config this object will contain the full kepler.gl instance configuration {mapState, mapStyle, visState}
  * @param {string} version which version of Kepler.gl to load.
@@ -67,7 +66,7 @@ export const exportMapToHTML = (options, version = KEPLER_GL_VERSION) => {
           /**
            * Provide your MapBox Token
            **/
-          const MAPBOX_TOKEN = '${options.mapboxApiAccessToken || 'PROVIDE_MAPBOX_TOKEN'}';
+          const MAPBOX_TOKEN = '';
           const WARNING_MESSAGE = 'Please Provide a Mapbox Token in order to use Kepler.gl. Edit this file and fill out MAPBOX_TOKEN with your access key';
         </script>
 
@@ -99,11 +98,6 @@ export const exportMapToHTML = (options, version = KEPLER_GL_VERSION) => {
 
         <!-- Load our React component. -->
         <script>
-          /* Validate Mapbox Token */
-          if ((MAPBOX_TOKEN || '') === '' || MAPBOX_TOKEN === 'PROVIDE_MAPBOX_TOKEN') {
-            alert(WARNING_MESSAGE);
-          }
-
           /** STORE **/
           const reducers = (function createReducers(redux, keplerGl) {
             return redux.combineReducers({
@@ -195,7 +189,6 @@ export const exportMapToHTML = (options, version = KEPLER_GL_VERSION) => {
                 {style: {position: 'absolute', left: 0, width: '100vw', height: '100vh'}},
                 ${options.mode === EXPORT_HTML_MAP_MODES.READ ? 'LogoSvg(),' : ''}
                 react.createElement(keplerGl.KeplerGl, {
-                  mapboxApiAccessToken: mapboxToken,
                   id: "map",
                   width: windowDimension.width,
                   height: windowDimension.height

@@ -17,7 +17,6 @@ export type TileLoadProps = {
 
 export type ThreeDBuildingLayerProps = {
   id: string;
-  mapboxApiAccessToken: string;
   mapboxApiUrl: string;
   threeDBuildingColor: RGBColor;
   updateTriggers: {

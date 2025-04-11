@@ -93,7 +93,6 @@ export type ModalContainerProps = {
   rootNode: React.ReactInstance | null | undefined;
   containerW: number;
   containerH: number;
-  mapboxApiAccessToken: string;
   mapboxApiUrl?: string;
   mapState: MapState;
   mapStyle: MapStyle;
@@ -430,7 +429,6 @@ export default function ModalContainerFactory(
                 config={keplerGlConfig}
                 options={uiState.exportMap}
                 onChangeExportMapFormat={uiStateActions.setExportMapFormat}
-                onEditUserMapboxAccessToken={uiStateActions.setUserMapboxAccessToken}
                 onChangeExportMapHTMLMode={uiStateActions.setExportHTMLMapMode}
               />
             );
@@ -450,7 +448,6 @@ export default function ModalContainerFactory(
           case ADD_MAP_STYLE_ID:
             template = (
               <AddMapStyleModal
-                mapboxApiAccessToken={this.props.mapboxApiAccessToken}
                 mapboxApiUrl={this.props.mapboxApiUrl}
                 mapState={this.props.mapState}
                 inputStyle={mapStyle.inputStyle}

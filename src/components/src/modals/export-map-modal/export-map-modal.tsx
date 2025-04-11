@@ -10,12 +10,11 @@ import {StyledExportMapSection} from './components';
 import ExportHtmlMapFactory from './export-html-map';
 import ExportJsonMapFactory from './export-json-map';
 import {FormattedMessage} from '@kepler.gl/localization';
-import {ActionHandler, setExportHTMLMapMode, setUserMapboxAccessToken} from '@kepler.gl/actions';
+import {ActionHandler, setExportHTMLMapMode} from '@kepler.gl/actions';
 
 interface ExportMapModalFactoryProps {
   options?: {format: string};
   config: any;
-  onEditUserMapboxAccessToken: ActionHandler<typeof setUserMapboxAccessToken>;
   onChangeExportMapHTMLMode?: ActionHandler<typeof setExportHTMLMapMode>;
   onChangeExportMapFormat?: (format: string) => any;
   mapFormat?: string;
@@ -35,7 +34,6 @@ function ExportMapModalFactory(
     config = {},
     onChangeExportMapFormat = NO_OP,
     onChangeExportMapHTMLMode = NO_OP,
-    onEditUserMapboxAccessToken = NO_OP,
     options = {format: ''}
   }: ExportMapModalFactoryProps) => (
     <StyledModalContent className="export-map-modal">
@@ -68,7 +66,6 @@ function ExportMapModalFactory(
             [EXPORT_MAP_FORMATS.HTML]: (
               <ExportHtmlMap
                 onChangeExportMapHTMLMode={onChangeExportMapHTMLMode}
-                onEditUserMapboxAccessToken={onEditUserMapboxAccessToken}
                 options={options[options.format]}
               />
             ),

@@ -63,13 +63,12 @@ Default initial `mapStyle`
 -   `visibleLayerGroups` **[Object][23]** Default: `{}`
 -   `topLayerGroups` **[Object][23]** Default: `{}`
 -   `mapStyles` **[Object][23]** mapping from style key to style object
--   `mapboxApiAccessToken` **[string][22]** Default: `null`
 -   `inputStyle` **[Object][23]** Default: `{}`
 -   `threeDBuildingColor` **[Array][24]** Default: `[r, g, b]`
 
 ### initMapStyleUpdater
 
-Propagate `mapStyle` reducer with `mapboxApiAccessToken` and `mapStylesReplaceDefault`.
+Propagate `mapStyle` reducer with `mapStylesReplaceDefault`.
 if mapStylesReplaceDefault is true mapStyles is emptied; loadMapStylesUpdater() will
 populate mapStyles.
 
@@ -80,7 +79,6 @@ populate mapStyles.
 -   `state` **[Object][23]**
 -   `action` **[Object][23]**
     -   `action.payload` **[Object][23]**
-        -   `action.payload.mapboxApiAccessToken` **[string][22]**
 
 Returns **[Object][23]** nextState
 

@@ -125,7 +125,6 @@ interface GeocoderPanelProps {
   isGeocoderEnabled: boolean;
   mapState: MapState;
   uiState: UiState;
-  mapboxApiAccessToken: string;
   updateVisData: ActionHandler<typeof updateVisData>;
   removeDataset: ActionHandler<typeof removeDataset>;
   updateMap: ActionHandler<typeof updateMap>;
@@ -142,7 +141,6 @@ export default function GeocoderPanelFactory(): React.FC<GeocoderPanelProps> {
   const GeocoderPanel = ({
     isGeocoderEnabled,
     mapState,
-    mapboxApiAccessToken,
     updateVisData,
     removeDataset,
     updateMap,
@@ -221,14 +219,12 @@ export default function GeocoderPanelFactory(): React.FC<GeocoderPanelProps> {
         unsyncedViewports={unsyncedViewports}
         style={{display: isGeocoderEnabled ? 'block' : 'none'}}
       >
-        {isValid(mapboxApiAccessToken) && (
-          <Geocoder
-            mapboxApiAccessToken={mapboxApiAccessToken}
-            onSelected={onSelected}
-            onDeleteMarker={removeGeocoderDataset}
-            width={width}
-          />
-        )}
+        {/* Always render Geocoder since local tiles don't need a token */}
+        <Geocoder
+          onSelected={onSelected}
+          onDeleteMarker={removeGeocoderDataset}
+          width={width}
+        />
       </StyledGeocoderPanel>
     );
   };

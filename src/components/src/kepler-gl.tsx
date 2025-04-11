@@ -161,7 +161,6 @@ export const mapStateSelector = (props: any, index: number): any => {
 
 export const mapFieldsSelector = (props: KeplerGLProps, index = 0) => ({
   getMapboxRef: props.getMapboxRef,
-  mapboxApiAccessToken: props.mapboxApiAccessToken,
   mapboxApiUrl: props.mapboxApiUrl ? props.mapboxApiUrl : DEFAULT_KEPLER_GL_PROPS.mapboxApiUrl,
   mapState: mapStateSelector(props, index),
   datasetAttributions: attributionSelector(props).sources,
@@ -259,7 +258,6 @@ export const modalContainerSelector = (props: KeplerGLProps, rootNode) => ({
   uiState: props.uiState,
   providerState: props.providerState,
 
-  mapboxApiAccessToken: props.mapboxApiAccessToken,
   mapboxApiUrl: props.mapboxApiUrl,
   visStateActions: props.visStateActions,
   uiStateActions: props.uiStateActions,
@@ -282,7 +280,6 @@ export const geoCoderPanelSelector = (
   dimensions: {width: number; height: number}
 ) => ({
   isGeocoderEnabled: props.visState.interactionConfig.geocoder.enabled,
-  mapboxApiAccessToken: props.mapboxApiAccessToken,
   mapState: props.mapState,
   uiState: props.uiState,
   layerOrder: props.visState.layerOrder,
@@ -369,7 +366,6 @@ export const DEFAULT_KEPLER_GL_PROPS = {
 };
 
 type KeplerGLBasicProps = {
-  mapboxApiAccessToken: string;
   mapboxApiUrl?: string;
   id: string;
   width?: number;
@@ -448,9 +444,6 @@ function KeplerGlFactory(
     };
 
     componentDidMount() {
-      if (getApplicationConfig().baseMapLibraryConfig?.['mapbox']?.mapLibName === 'Mapbox') {
-        this._validateMapboxToken();
-      }
       this._loadMapStyle();
       if (typeof this.props.onKeplerGlInitialized === 'function') {
         this.props.onKeplerGlInitialized();
@@ -511,10 +504,11 @@ function KeplerGlFactory(
 
     /* private methods */
     _validateMapboxToken() {
-      const {mapboxApiAccessToken} = this.props;
-      if (!validateToken(mapboxApiAccessToken)) {
-        Console.warn(MISSING_MAPBOX_TOKEN);
-      }
+      // This method is now effectively a no-op as the token is no longer used
+      // const {mapboxApiAccessToken} = this.props;
+      // if (!validateToken(mapboxApiAccessToken)) {
+      //   Console.warn(MISSING_MAPBOX_TOKEN);
+      // }
     }
 
     _loadMapStyle = () => {

@@ -30,10 +30,7 @@ workspaces.forEach(workspace => {
 });
 
 const ENV_VARIABLES_WITH_INSTRUCTIONS = {
-  MapboxAccessToken: 'You can get the token at https://www.mapbox.com/help/how-access-tokens-work/',
   DropboxClientId: 'You can get the token at https://www.dropbox.com/developers',
-  CartoClientId: 'You can get the token at https://www.mapbox.com/help/how-access-tokens-work/',
-  MapboxExportToken: 'You can get the token at https://location.foursquare.com/developer',
   FoursquareClientId: 'You can get the token at https://location.foursquare.com/developer',
   FoursquareDomain: 'You can get the token at https://location.foursquare.com/developer',
   FoursquareAPIURL: 'You can get the token at https://location.foursquare.com/developer',

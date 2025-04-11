@@ -8,10 +8,6 @@ Use <b>Node v18</b> and above, older node versions have not been tested
 npm install --save kepler.gl @kepler.gl/components @kepler.gl/reducers
 ```
 
-### Get Mapbox Token
-
-Kepler.gl is built on top of [Mapbox GL](https://www.mapbox.com). A mapbox account and an access token are needed to use kepler.gl in your app. Get a [Mapbox Access Token](https://www.mapbox.com/help/define-access-token/) at mapbox.com.
-
 ### Basic Usage
 
 ![Basic Usage][basic-usage]
@@ -64,7 +60,6 @@ const App = () => (
     <AutoSizer>
       {({ height, width }) => (
         <KeplerGl
-          mapboxApiAccessToken="xxx" // Replace with your mapbox token
           id="map"
           width={width}
           height={height}
@@ -120,7 +115,6 @@ import KeplerGl from '@kepler.gl/components';
 const Map = props => (
   <KeplerGl
       id="foo"
-      mapboxApiAccessToken={token}
       width={width}
       height={height}/>
 );

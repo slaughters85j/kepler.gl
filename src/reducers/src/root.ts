@@ -32,7 +32,6 @@ export function provideInitialState(initialState, extraReducers?) {
       payload: {
         id,
         mint,
-        mapboxApiAccessToken,
         mapboxApiUrl,
         mapStylesReplaceDefault,
         initialUiState
@@ -50,7 +49,7 @@ export function provideInitialState(initialState, extraReducers?) {
       ...state,
       [id]: coreReducer(
         previousState,
-        keplerGlInit({mapboxApiAccessToken, mapboxApiUrl, mapStylesReplaceDefault, initialUiState})
+        keplerGlInit({mapboxApiUrl, mapStylesReplaceDefault, initialUiState})
       )
     };
   };
