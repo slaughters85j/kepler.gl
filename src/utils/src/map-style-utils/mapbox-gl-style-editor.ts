@@ -97,39 +97,28 @@ export const editBottomMapStyle = memoize(({id, mapStyle, visibleLayerGroups}) =
   };
 }, resolver);
 
-export function getStyleDownloadUrl(styleUrl, accessToken, mapboxApiUrl) {
+export function getStyleDownloadUrl(styleUrl) {
+  // If it's already a full URL, return it
   if (styleUrl.startsWith('http')) {
     return styleUrl;
   }
 
-  // mapbox://styles/jckr/cjhcl0lxv13di2rpfoytdbdyj
-  if (styleUrl.startsWith('mapbox://styles')) {
-    const styleId = styleUrl.replace('mapbox://styles/', '');
-
-    // https://api.mapbox.com/styles/v1/heshan0131/cjg1bfumo1cwm2rlrjxkinfgw?pluginName=Keplergl&access_token=<token>
-    return `${
-      mapboxApiUrl || DEFAULT_MAPBOX_API_URL
-    }/styles/v1/${styleId}?pluginName=Keplergl&access_token=${accessToken}`;
-  }
-
-  // style url not recognized
+  // style url not recognized or not a direct HTTP(S) URL
   return null;
 }
 
 /**
  * Generate static map image from style Url to be used as icon
+ * REMOVED: This function no longer generates Mapbox static images.
+ * Returns null.
  * @param param
  * @param param.styleUrl
- * @param param.mapboxApiAccessToken
- * @param param.mapboxApiUrl
  * @param param.mapState
  * @param param.mapW
  * @param param.mapH
  */
 export function getStyleImageIcon({
   styleUrl,
-  mapboxApiAccessToken,
-  mapboxApiUrl = DEFAULT_MAPBOX_API_URL,
   mapState = {
     longitude: -122.3391,
     latitude: 37.7922,
@@ -139,20 +128,12 @@ export function getStyleImageIcon({
   mapH = 300
 }: {
   styleUrl: string;
-  mapboxApiAccessToken: string;
-  mapboxApiUrl?: string;
   mapState?: Partial<MapState>;
   mapW?: number;
   mapH?: number;
 }) {
-  const styleId = styleUrl.replace('mapbox://styles/', '');
-
-  return (
-    `${mapboxApiUrl}/styles/v1/${styleId}/static/` +
-    `${mapState.longitude},${mapState.latitude},${mapState.zoom},0,0/` +
-    `${mapW}x${mapH}` +
-    `?access_token=${mapboxApiAccessToken}&logo=false&attribution=false`
-  );
+  // Return null as we don't generate icons this way anymore
+  return null;
 }
 
 export function scaleMapStyleByResolution(mapboxStyle, scale) {

@@ -308,7 +308,6 @@ export interface MapContainerProps {
   mapState: MapState;
   mapControls: MapControls;
   mapStyle: {bottomMapStyle?: MapboxStyle; topMapStyle?: MapboxStyle} & MapStyle;
-  mapboxApiAccessToken: string;
   mapboxApiUrl: string;
   visStateActions: typeof VisStateActions;
   mapStateActions: typeof MapStateActions;
@@ -418,7 +417,7 @@ export default function MapContainerFactory(
       if (primary) {
         const {mapStateActions} = this.props;
         if (dimensions && dimensions.width > 0 && dimensions.height > 0) {
-          mapStateActions.updateMap(dimensions, index);
+          this.props.mapStateActions.updateMap(dimensions, index);
         }
       }
     };
@@ -754,203 +753,136 @@ export default function MapContainerFactory(
       }
     ) {
       const {
-        mapStyle,
-        visState,
         mapState,
+        visState,
         visStateActions,
-        mapboxApiAccessToken,
         mapboxApiUrl,
         deckGlProps,
         index,
         mapControls,
-        deckRenderCallbacks,
+        locale,
         theme,
+        getMapboxRef,
+        primary,
         generateDeckGLLayers,
-        onMouseMove
+        deckRenderCallbacks
       } = this.props;
 
-      const {hoverInfo, editor} = visState;
+      const deckGLRenderer = generateDeckGLLayers || computeDeckLayers;
+      const currentStyle = this.props.mapStyle.mapStyles?.[this.props.mapStyle.styleType];
+      const baseMapLibraryName = getBaseMapLibrary(currentStyle);
+      const baseMapLibraryConfig = getApplicationConfig().baseMapLibraryConfig[baseMapLibraryName];
+
+      const {layers, layerData, layerOrder, interactionConfig, datasets} = visState;
+      const {isSplit} = mapState;
       const {primaryMap, isInteractive, children} = options;
+      const viewIndex = index || 0;
+      const {onDeckLoad, onDeckRender, onDeckAfterRender} = deckRenderCallbacks ?? {};
 
-      // disable double click zoom when editor is in any draw mode
-      const {mapDraw} = mapControls;
-      const {active: editorMenuActive = false} = mapDraw || {};
-      const isEditorDrawingMode = EditorLayerUtils.isDrawingActive(editorMenuActive, editor.mode);
-
-      const internalViewState = this.context?.getInternalViewState(index);
-      const internalMapState = {...mapState, ...internalViewState};
-      const viewport = getViewportFromMapState(internalMapState);
-
-      const editorFeatureSelectedIndex = this.selectedPolygonIndexSelector(this.props);
-
-      const {setFeatures, onLayerClick, setSelectedFeature} = visStateActions;
-
-      const generateDeckGLLayersMethod = generateDeckGLLayers ?? computeDeckLayers;
-      const deckGlLayers = generateDeckGLLayersMethod(
-        {
-          visState,
-          mapState: internalMapState,
-          mapStyle
-        },
-        {
-          mapIndex: index,
-          primaryMap,
-          mapboxApiAccessToken,
-          mapboxApiUrl,
-          layersForDeck,
-          editorInfo: primaryMap
-            ? {
-                editor,
-                editorMenuActive,
-                onSetFeatures: setFeatures,
-                setSelectedFeature,
-                // @ts-ignore Argument of type 'Readonly<MapContainerProps>' is not assignable to parameter of type 'never'
-                featureCollection: this.featureCollectionSelector(this.props),
-                selectedFeatureIndexes: this.selectedFeatureIndexArraySelector(
-                  // @ts-ignore Argument of type 'unknown' is not assignable to parameter of type 'number'.
-                  editorFeatureSelectedIndex
-                ),
-                viewport
-              }
-            : undefined
-        },
-        {
-          onLayerHover: this._onLayerHover,
+      const mapPopover =
+        primaryMap && !this.props.readOnly ? {
+          pinned: this.props.visState.pinned, // eslint-disable-line
+          layerHoverProp: this.props.visState.hoverInfo,
+          onLayerHover: this._onLayerHoverDebounced,
           onSetLayerDomain: this._onLayerSetDomain,
-          onFilteredItemsChange: this._onLayerFilteredItemsChange
-        },
-        deckGlProps
-      );
+          onLayerFilteredItemsChange: this._onLayerFilteredItemsChange
+        } : {};
 
-      const extraDeckParams: {
-        getTooltip?: (info: any) => object | null;
-        getCursor?: ({isDragging}: {isDragging: boolean}) => string;
-      } = {};
-      if (primaryMap) {
-        extraDeckParams.getTooltip = info =>
-          EditorLayerUtils.getTooltip(info, {
-            editorMenuActive,
-            editor,
-            theme
-          });
-
-        extraDeckParams.getCursor = ({isDragging}: {isDragging: boolean}) => {
-          const editorCursor = EditorLayerUtils.getCursor({
-            editorMenuActive,
-            editor,
-            hoverInfo
-          });
-          if (editorCursor) return editorCursor;
-
-          if (isDragging) return 'grabbing';
-          if (hoverInfo?.layer) return 'pointer';
-          return 'grab';
-        };
-      }
-
-      const effects = this._isOKToRenderEffects(index)
-        ? computeDeckEffects({visState, mapState})
-        : [];
-
-      const views = deckGlProps?.views
-        ? deckGlProps?.views()
-        : new MapView({legacyMeterSizes: true});
-
-      let allDeckGlProps = {
+      const internalViewState = this.context?.getInternalViewState(viewIndex);
+      const deckProps = {
         ...deckGlProps,
-        pickingRadius: DEFAULT_PICKING_RADIUS,
-        views,
-        layers: deckGlLayers,
-        effects
+        layers: deckGLRenderer(
+          {
+            visState,
+            mapState,
+            mapControls
+          },
+          {
+            datasets,
+            mapLayers: this.mapLayersSelector(this.props),
+            layers,
+            layerData,
+            layerOrder,
+            mapIndex: index,
+            primaryMap,
+            mapboxApiUrl,
+            layersForDeck,
+            interactionConfig,
+            mapPopover,
+            mapStyle: this.props.mapStyle,
+            theme,
+            locale
+          }
+        ),
+        viewState: internalViewState,
+        width: '100%',
+        height: '100%',
+        onBeforeRender: this._onBeforeRender,
+        onHover: this._onLayerHoverDebounced,
+        onLoad: onDeckLoad,
+        onError: this._onDeckError,
+        onClick: isInteractive ? this._onLayerClick : undefined,
+        onViewStateChange: this._onViewportChange,
+        onDragStart: visStateActions.setMapInteraction,
+        onDragEnd: visStateActions.setMapInteraction,
+        onInteractionStateChange: visStateActions.setMapInteraction,
+        ...(onDeckRender && {onRender: onDeckRender}),
+        ...(onDeckAfterRender && {onAfterRender: onDeckAfterRender})
       };
 
-      if (typeof deckRenderCallbacks?.onDeckRender === 'function') {
-        allDeckGlProps = deckRenderCallbacks.onDeckRender(allDeckGlProps);
-        if (!allDeckGlProps) {
-          // if onDeckRender returns null, do not render deck.gl
-          return null;
-        }
+      if (deckProps.onError && typeof deckProps.onError !== 'function') {
+        delete deckProps.onError;
       }
 
+      // Check if deckRenderCallbacks.onDeckRender returns false to prevent rendering
+      const shouldRenderDeck = onDeckRender ? onDeckRender(deckProps) : true;
+      if (!shouldRenderDeck) {
+        // Returning null here will prevent the map from rendering
+        return null;
+      }
+
+      if (isInteractive) {
+        // adds tooltips
+        deckProps.getCursor = interactionConfig.tooltip.enabled ? 'pointer' : 'grab';
+        deckProps.getTooltip = info => this._getTooltip(info);
+      }
+
+      const {visStateActions: actions} = this.props;
+
       return (
-        <div
-          {...(isInteractive
-            ? {
-                onMouseMove: primaryMap
-                  ? event => {
-                      onMouseMove?.(event);
-                      this._onMouseMoveDebounced(event, viewport);
-                    }
-                  : undefined
+        <DeckGL
+          {...deckProps}
+          id="default-deckgl-overlay"
+          key="default-deckgl-overlay"
+          ref={comp => {
+            if (comp && comp.deck && !this._deck) {
+              // @ts-ignore
+              this._deck = comp.deck;
+              if (typeof this.props.onDeckInitialized === 'function') {
+                this.props.onDeckInitialized(this._deck, gl);
               }
-            : {style: {pointerEvents: 'none'}})}
+              // @ts-ignore
+              this.context?.onDeckInitialized(this._deck, viewIndex);
+            }
+          }}
+          onWebGLInitialized={gl => {
+            if (typeof this.props.onDeckInitialized === 'function') {
+              this.props.onDeckInitialized(this._deck, gl);
+            }
+            // @ts-ignore
+            this.context?.onDeckInitialized(this._deck, viewIndex);
+          }}
+          onMouseMove={(info, event) => {
+            actions.onMouseMove({
+              ...event,
+              lngLat: info?.coordinate
+            });
+            this._onMouseMoveDebounced(event, internalViewState);
+          }}
+          pickable={mapControls.mapDraw.active}
         >
-          <DeckGL
-            id="default-deckgl-overlay"
-            onLoad={() => {
-              if (typeof deckRenderCallbacks?.onDeckLoad === 'function') {
-                deckRenderCallbacks.onDeckLoad();
-              }
-            }}
-            {...allDeckGlProps}
-            controller={
-              isInteractive
-                ? {
-                    doubleClickZoom: !isEditorDrawingMode,
-                    dragRotate: this.props.mapState.dragRotate
-                  }
-                : false
-            }
-            initialViewState={internalViewState}
-            onBeforeRender={this._onBeforeRender}
-            onViewStateChange={isInteractive ? this._onViewportChange : undefined}
-            {...extraDeckParams}
-            onHover={
-              isInteractive
-                ? data => {
-                    const res = EditorLayerUtils.onHover(data, {
-                      editorMenuActive,
-                      editor,
-                      hoverInfo
-                    });
-                    if (res) return;
-
-                    this._onLayerHoverDebounced(data, index);
-                  }
-                : null
-            }
-            onClick={(data, event) => {
-              // @ts-ignore
-              normalizeEvent(event.srcEvent, viewport);
-              const res = EditorLayerUtils.onClick(data, event, {
-                editorMenuActive,
-                editor,
-                onLayerClick,
-                setSelectedFeature,
-                mapIndex: index
-              });
-              if (res) return;
-
-              visStateActions.onLayerClick(data);
-            }}
-            onError={this._onDeckError}
-            ref={comp => {
-              // @ts-ignore
-              if (comp && comp.deck && !this._deck) {
-                // @ts-ignore
-                this._deck = comp.deck;
-              }
-            }}
-            onWebGLInitialized={gl => this._onDeckInitialized(gl)}
-            onAfterRender={() => {
-              if (typeof deckRenderCallbacks?.onDeckAfterRender === 'function') {
-                deckRenderCallbacks.onDeckAfterRender(allDeckGlProps);
-              }
-            }}
-          >
-            {children}
-          </DeckGL>
-        </div>
+          {children}
+        </DeckGL>
       );
     }
 
@@ -1015,8 +947,6 @@ export default function MapContainerFactory(
         mapStyle,
         mapStateActions,
         MapComponent = Map,
-        mapboxApiAccessToken,
-        // mapboxApiUrl,
         mapControls,
         isExport,
         locale,
@@ -1049,12 +979,10 @@ export default function MapContainerFactory(
       const mapProps = {
         ...internalViewState,
         preserveDrawingBuffer: true,
-        mapboxAccessToken: currentStyle?.accessToken || mapboxApiAccessToken,
-        // baseApiUrl: mapboxApiUrl,
         mapLib: baseMapLibraryConfig.getMapLib(),
         transformRequest:
           this.props.transformRequest ||
-          transformRequest(currentStyle?.accessToken || mapboxApiAccessToken)
+          transformRequest()
       };
 
       const hasGeocoderLayer = Boolean(layers.find(l => l.id === GEOCODER_LAYER_ID));
@@ -1139,7 +1067,6 @@ export default function MapContainerFactory(
               viewState={internalViewState}
               mapStyle={mapStyle.topMapStyle}
               style={MAP_STYLE.top}
-              mapboxAccessToken={mapProps.mapboxAccessToken}
               transformRequest={mapProps.transformRequest}
               mapLib={baseMapLibraryConfig.getMapLib()}
               {...topMapContainerProps}

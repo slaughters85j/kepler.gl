@@ -64,7 +64,7 @@ npm install --save @kepler.gl/components
 yarn add @kepler.gl/components
 ```
 
-kepler.gl is built upon [mapbox][mapbox]. You will need a [Mapbox Access Token][mapbox-token] to use it.
+kepler.gl can utilize [mapbox][mapbox] or any compatible tile server. A [Mapbox Access Token][mapbox-token] is optional and only needed if you choose to use Mapbox services.
 
 If you don't use a module bundler, it's also fine. Kepler.gl npm package includes precompiled production UMD builds in the [umd folder](https://unpkg.com/kepler.gl/umd).
 You can add the script tag to your html file as it follows (latest version of Kepler.gl):
@@ -145,7 +145,7 @@ Read more about [Reducers][reducers].
 import KeplerGl from '@kepler.gl/components';
 
 const Map = props => (
-  <KeplerGl id="foo" width={width} mapboxApiAccessToken={token} height={height} />
+  <KeplerGl id="foo" width={width} height={height} />
 );
 ```
 
@@ -154,7 +154,6 @@ const Map = props => (
 | Prop Name                     | Type        | Default Value              | Description                                                                                                                                                                                                             |
 |-------------------------------|-------------|----------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | `id`                           | String      | `map`                      | The unique identifier for the KeplerGl instance. Required when multiple KeplerGl instances exist. It maps to the state in the reducer (e.g. component with id `foo` can be found in`state.keplerGl.foo`).               |
-| `mapboxApiAccessToken`         | String      | `undefined`                | API token for Mapbox, used for rendering base maps. Create a free token at [Mapbox](https://www.mapbox.com).                                                                                                            |
 | `getState`                     | Function    | `state => state.keplerGl`   | Function that specifies the path to the root KeplerGl state in the reducer.                                                                                                                                             |
 | `width`                        | Number      | `800`                      | The width of the KeplerGl UI in pixels.                                                                                                                                                                                 |
 | `height`                       | Number      | `800`                      | The height of the KeplerGl UI in pixels.                                                                                                                                                                                |
@@ -165,8 +164,8 @@ const Map = props => (
 | `getMapboxRef(mapbox, index)`  | Function    | `undefined`                | Called when `KeplerGl` adds or removes a MapContainer with an inner Mapbox map. `mapbox` is a `MapRef` when added, or `null` when removed. `index` is `0` for the first map and `1` for the second map in a split view. |
 | `actions`                      | Object      | `{}`                       | Custom action creators to override the default KeplerGl action creators. Only use custom action when you want to modify action payload.                                                                                 |
 | `mint`                         | Boolean     | `true`                     | Determines whether to load a fresh empty state when mounted. When `false`, the state persists across remounts. Useful for modal use cases.                                                                              |
-| `theme`                        | Object/String| `null`                     | Set to `"dark"`, `"light"`, or `"base"`, or pass a theme object to customize KeplerGl’s style.                                                                                                                          |
-| `mapboxApiUrl`                 | String      | `https://api.mapbox.com`    | The Mapbox API URL if you are using a custom Mapbox tile server.                                                                                                                                                        |
+| `theme`                        | Object/String| `null`                     | Set to `"dark"`, `"light"`, or `"base"`, or pass a theme object to customize KeplerGl's style.                                                                                                                          |
+| `mapboxApiUrl`                 | String      | `https://api.mapbox.com`    | The API URL if you are using a custom Mapbox/MapLibre tile server (e.g., `http://localhost:3000`). Defaults to Mapbox.                                                                                                  |
 | `mapStylesReplaceDefault`      | Boolean     | `false`                    | Set to `true` to replace default map styles with custom ones. (see ```mapStyles``` prop)                                                                                                                                      |
 | `mapStyles`                    | Array       | `[]`                       | An array of [custom map styles](#example-custom-map-style)  for the map style selection panel. Styles replace the default ones if `mapStylesReplaceDefault` is `true`.                                                  |
 | `initialUiState`               | Object      | `undefined`                | The initial UI state applied to the `uiState` reducer.                                                                                                                                                                  |
@@ -211,7 +210,7 @@ const mapStyles = [
 
 One advantage of using the reducer over React component state to handle keplerGl state is the flexibility
 to customize its behavior. If you only have one `KeplerGl` instance in your app or never intend to dispatch actions to KeplerGl from outside the component itself,
-you don’t need to worry about forwarding dispatch and can move on to the next section. But life is full of customizations, and we want to make yours as enjoyable as possible.
+you don't need to worry about forwarding dispatch and can move on to the next section. But life is full of customizations, and we want to make yours as enjoyable as possible.
 
 There are multiple ways to dispatch actions to a specific `KeplerGl` instance.
 
@@ -282,7 +281,7 @@ const MapContainer = props => (
 const mapStateToProps = state => state
 const mapDispatchToProps = (dispatch, props) => ({
  dispatch,
- keplerGlDispatch: forwardTo(‘foo’, dispatch)
+ keplerGlDispatch: forwardTo('foo', dispatch)
 });
 
 export default connect(
@@ -343,7 +342,6 @@ const customTheme = {
 
 return (
   <KeplerGl
-    mapboxApiAccessToken={MAPBOX_TOKEN}
     id="map"
     width={800}
     height={800}
@@ -371,7 +369,7 @@ const customTheme = {
 
 return (
   <ThemeProvider theme={customTheme}>
-    <KeplerGl mapboxApiAccessToken={MAPBOX_TOKEN} id="map" width={800} height={800} />
+    <KeplerGl id="map" width={800} height={800} />
   </ThemeProvider>
 );
 ```

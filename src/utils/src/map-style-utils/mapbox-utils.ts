@@ -41,12 +41,9 @@ export function isStyleUsingOpenStreetMapTiles(mapStyle: any) {
 
 /**
  * Transform mapbox protocol so can be used with maplibre
- * @param mapboxKey mapbox api key
  * @returns transformed url
  */
-export const transformRequest = (
-  _mapboxKey: string
-): ((url: string, resourceType: string) => {url: string}) => {
+export const transformRequest = (): ((url: string, resourceType: string) => {url: string}) => {
   return (url: string, _resourceType: string) => {
     /*
     if (isMapboxURL(url)) {

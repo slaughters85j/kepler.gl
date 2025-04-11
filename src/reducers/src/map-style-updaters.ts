@@ -55,8 +55,6 @@ export type MapStyle = {
   visibleLayerGroups: VisibleLayerGroups;
   topLayerGroups: VisibleLayerGroups;
   mapStyles: MapStyles;
-  // save mapbox access token
-  mapboxApiAccessToken: string | null;
   mapboxApiUrl: string;
   mapStylesReplaceDefault: boolean;
   inputStyle: InputStyle;
@@ -86,8 +84,6 @@ const getDefaultState = (): MapStyle => {
       }),
       {}
     ),
-    // save mapbox access token
-    mapboxApiAccessToken: null,
     mapboxApiUrl: DEFAULT_MAPBOX_API_URL,
     mapStylesReplaceDefault: false,
     inputStyle: getInitialInputStyle(),
@@ -149,8 +145,7 @@ const mapStyleUpdaters = null;
  * @property visibleLayerGroups - Default: `{}`
  * @property topLayerGroups - Default: `{}`
  * @property mapStyles - mapping from style key to style object
- * @property mapboxApiAccessToken - Default: `null`
- * @Property mapboxApiUrl - Default null
+ * @property mapboxApiUrl - Default null
  * @Property mapStylesReplaceDefault - Default: `false`
  * @property inputStyle - Default: `{}`
  * @property threeDBuildingColor - Default: `[r, g, b]`
@@ -330,7 +325,6 @@ export const requestMapStylesUpdater = (
   );
   const loadMapStyleTasks = getLoadMapStyleTasks(
     toLoad,
-    state.mapboxApiAccessToken,
     state.mapboxApiUrl,
     onSuccess
   );
@@ -350,7 +344,7 @@ export const requestMapStylesUpdater = (
 };
 
 /**
- * Propagate `mapStyle` reducer with `mapboxApiAccessToken` and `mapStylesReplaceDefault`.
+ * Propagate `mapStyle` reducer with `mapboxApiUrl` and `mapStylesReplaceDefault`.
  * if mapStylesReplaceDefault is true mapStyles is emptied; loadMapStylesUpdater() will
  * populate mapStyles.
  *
@@ -367,8 +361,6 @@ export const initMapStyleUpdater = (
   }
 ): MapStyle => ({
   ...state,
-  // save mapbox access token to map style state
-  mapboxApiAccessToken: payload.mapboxApiAccessToken || state.mapboxApiAccessToken,
   mapboxApiUrl: payload.mapboxApiUrl || state.mapboxApiUrl,
   mapStyles: !payload.mapStylesReplaceDefault ? state.mapStyles : {},
   mapStylesReplaceDefault: payload.mapStylesReplaceDefault || false
@@ -594,14 +586,14 @@ export const receiveMapConfigUpdater = (
   return mapStyleChangeUpdater(newState, {payload: {styleType: newState.styleType}});
 };
 
-function getLoadMapStyleTasks(mapStyles, mapboxApiAccessToken, mapboxApiUrl, onSuccess) {
+function getLoadMapStyleTasks(mapStyles, mapboxApiUrl, onSuccess) {
   return [
     Task.all(
       Object.values(mapStyles)
         // @ts-expect-error
-        .map(({id, url, accessToken}) => ({
+        .map(({id, url}) => ({
           id,
-          url: getStyleDownloadUrl(url, accessToken || mapboxApiAccessToken, mapboxApiUrl)
+          url: getStyleDownloadUrl(url)
         }))
         .map(LOAD_MAP_STYLE_TASK)
     ).bimap(
@@ -635,7 +627,6 @@ function getLoadMapStyleTasks(mapStyles, mapboxApiAccessToken, mapboxApiUrl, onS
 export const resetMapConfigMapStyleUpdater = (state: MapStyle): MapStyle => {
   const emptyConfig = {
     ...INITIAL_MAP_STYLE,
-    mapboxApiAccessToken: state.mapboxApiAccessToken,
     mapboxApiUrl: state.mapboxApiUrl,
     mapStylesReplaceDefault: state.mapStylesReplaceDefault,
     ...state.initialState,
@@ -705,9 +696,7 @@ export const inputMapStyleUpdater = (
       ? // Get image icon urls only for mapbox map lib.
         getStyleImageIcon({
           mapState,
-          styleUrl: updated.url || '',
-          mapboxApiAccessToken: updated.accessToken || state.mapboxApiAccessToken || '',
-          mapboxApiUrl: state.mapboxApiUrl || DEFAULT_MAPBOX_API_URL
+          styleUrl: updated.url || ''
         })
       : updated.icon;
 

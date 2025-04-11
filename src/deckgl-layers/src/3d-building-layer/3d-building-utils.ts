@@ -14,21 +14,25 @@ import {
 
 /* global fetch */
 const TILE_SIZE = 512;
-const MAPBOX_HOST = 'https://a.tiles.mapbox.com';
-const MAP_SOURCE = '/v4/mapbox.mapbox-streets-v7';
 
 export function getTileData(
   host: string,
-  token: string,
   {index: {x, y, z}}: {index: Coordinates}
 ): Promise<TileDataItem[]> {
-  const mapSource = `${
-    host || MAPBOX_HOST
-  }${MAP_SOURCE}/${z}/${x}/${y}.vector.pbf?access_token=${token}`;
+  const mapSource = `${host}/tiles/${z}/${x}/${y}.vector.pbf`;
 
   return fetch(mapSource)
-    .then(response => response.arrayBuffer())
-    .then(buffer => decodeTile(x, y, z, buffer));
+    .then(response => {
+      if (!response.ok) {
+        throw new Error(`Failed to fetch tile: ${response.status} ${response.statusText}`);
+      }
+      return response.arrayBuffer();
+    })
+    .then(buffer => decodeTile(x, y, z, buffer))
+    .catch(error => {
+      console.error(`Error fetching or decoding tile ${x}/${y}/${z}:`, error);
+      return [];
+    });
 }
 
 export function decodeTile(

@@ -26,7 +26,7 @@ import {TOOLTIP_FORMAT_TYPES} from './tooltip';
 export const ACTION_PREFIX = '@@kepler.gl/';
 export const KEPLER_UNFOLDED_BUCKET = 'https://studio-public-data.foursquare.com/statics/keplergl';
 export const BASEMAP_ICON_PREFIX = `${KEPLER_UNFOLDED_BUCKET}/geodude`;
-export const DEFAULT_MAPBOX_API_URL = 'https://api.mapbox.com';
+export const DEFAULT_MAPBOX_API_URL = 'http://localhost:3000';
 export const TRANSITION_DURATION = 0;
 
 // Modal Ids
@@ -314,8 +314,7 @@ export const DEFAULT_MAPBOX_STYLES: DefaultBaseMapStyle[] = [
   {
     id: 'dark',
     label: 'Dark',
-    url: 'mapbox://styles/uberdata/cjoqbbf6l9k302sl96tyvka09',
-    icon: `${BASEMAP_ICON_PREFIX}/UBER_DARK_V2.png`,
+    url: 'http://localhost:3000/styles/dark/style.json',
     layerGroups: DEFAULT_LAYER_GROUPS,
     colorMode: BASE_MAP_COLOR_MODES.DARK,
     complimentaryStyleId: 'light'
@@ -323,8 +322,7 @@ export const DEFAULT_MAPBOX_STYLES: DefaultBaseMapStyle[] = [
   {
     id: 'light',
     label: 'Light',
-    url: 'mapbox://styles/uberdata/cjoqb9j339k1f2sl9t5ic5bn4',
-    icon: `${BASEMAP_ICON_PREFIX}/UBER_LIGHT_V2.png`,
+    url: 'http://localhost:3000/styles/light/style.json',
     layerGroups: DEFAULT_LAYER_GROUPS,
     colorMode: BASE_MAP_COLOR_MODES.LIGHT,
     complimentaryStyleId: 'dark'
@@ -332,8 +330,7 @@ export const DEFAULT_MAPBOX_STYLES: DefaultBaseMapStyle[] = [
   {
     id: 'muted',
     label: 'Muted Light',
-    url: 'mapbox://styles/uberdata/cjfyl03kp1tul2smf5v2tbdd4',
-    icon: `${BASEMAP_ICON_PREFIX}/UBER_MUTED_LIGHT.png`,
+    url: 'http://localhost:3000/styles/muted/style.json',
     layerGroups: DEFAULT_LAYER_GROUPS,
     colorMode: BASE_MAP_COLOR_MODES.LIGHT,
     complimentaryStyleId: 'muted_night'
@@ -341,8 +338,7 @@ export const DEFAULT_MAPBOX_STYLES: DefaultBaseMapStyle[] = [
   {
     id: 'muted_night',
     label: 'Muted Night',
-    url: 'mapbox://styles/uberdata/cjfxhlikmaj1b2soyzevnywgs',
-    icon: `${BASEMAP_ICON_PREFIX}/UBER_MUTED_NIGHT.png`,
+    url: 'http://localhost:3000/styles/muted_night/style.json',
     layerGroups: DEFAULT_LAYER_GROUPS,
     colorMode: BASE_MAP_COLOR_MODES.DARK,
     complimentaryStyleId: 'muted'
@@ -353,8 +349,7 @@ export const DEFAULT_MAPBOX_SATELITE_STYLES: DefaultBaseMapStyle[] = [
   {
     id: 'satellite',
     label: 'Satellite with streets',
-    url: `mapbox://styles/mapbox/satellite-streets-v11`,
-    icon: `${BASEMAP_ICON_PREFIX}/UBER_SATELLITE.png`,
+    url: 'http://localhost:3000/styles/satellite/style.json',
     layerGroups: DEFAULT_LAYER_GROUPS,
     colorMode: BASE_MAP_COLOR_MODES.NONE
   }

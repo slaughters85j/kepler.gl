@@ -98,9 +98,8 @@ interface AddMapStyleModalProps {
   inputMapStyle: ActionHandler<typeof inputMapStyle>;
   inputStyle: InputStyle;
   loadCustomMapStyle: ActionHandler<typeof loadCustomMapStyle>;
-  mapboxApiAccessToken: string;
   mapboxApiUrl?: string;
-  transformRequest?: (mapboxKey: string) => (
+  transformRequest?: (/* REMOVED: mapboxKey: string */) => (
     url: string,
     resourceType: string
   ) => {
@@ -178,17 +177,15 @@ function AddMapStyleModalFactory() {
       const baseMapLibraryName = getBaseMapLibrary(inputStyle);
       const baseMapLibraryConfig = getApplicationConfig().baseMapLibraryConfig[baseMapLibraryName];
 
-      const mapboxApiAccessToken = inputStyle.accessToken || this.props.mapboxApiAccessToken;
+      const mapboxApiAccessToken = inputStyle.accessToken;
       const mapProps = {
         ...mapState,
-        // TODO baseApiUrl should be taken into account in transformRequest as we use dynamic mapLib import
-        // baseApiUrl: mapboxApiUrl,
         mapboxAccessToken: mapboxApiAccessToken,
         mapLib: baseMapLibraryConfig.getMapLib(),
         preserveDrawingBuffer: true,
         transformRequest:
-          this.props.transformRequest?.(mapboxApiAccessToken) ||
-          transformRequest(mapboxApiAccessToken)
+          this.props.transformRequest?.(/* REMOVED: mapboxApiAccessToken */) ||
+          transformRequest(/* REMOVED: mapboxApiAccessToken */)
       };
 
       return (
